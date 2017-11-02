@@ -1,10 +1,36 @@
 package com.example.testandologoali;
 
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.util.Log;
+
 import com.example.patinho.logoali.R;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
+import com.microsoft.windowsazure.mobileservices.table.sync.localstore.ColumnDataType;
+import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileServiceLocalStoreException;
+import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
+import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 class BancoDeDadosTeste {
+
+    /**
+     * Mobile Service Client reference
+     */
+    private MobileServiceClient mClient;
+
+    /**
+     * Mobile Service Table used to access data
+     */
+    private MobileServiceTable<ToDoItem> mToDoTable;
 
     private static ArrayList<Estabelecimento> estabelecimentos = new ArrayList<>();
     private static ArrayList<Fidelidade> fidelidades = new ArrayList<>();
@@ -36,6 +62,55 @@ class BancoDeDadosTeste {
         estabelecimentos.add(new Estabelecimento(8, "Cabelo no Chão", "Rua do sogro", "69", "Cunha", "Jacareí", "32246996", "Escova R$20,00\nCorte Masculino Desenhado R$30,00\nColoração R$120,00", "6 horas - 19 horas", 8, 5f, R.drawable.barbearia1, R.drawable.barbearia1_thumb));
     }
 
+    private static final Object lock = new Object();
+    private static BancoDeDadosTeste instance = null;
+
+    public static BancoDeDadosTeste getInstance(Activity activity) {
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new BancoDeDadosTeste(activity);
+            }
+        }
+        return instance;
+    }
+
+    private BancoDeDadosTeste(Activity activity) {
+        initializeConnection(activity);
+    }
+
+    private void initializeConnection (Activity activity) {
+        try {
+            // Create the Mobile Service Client instance, using the provided
+
+            // Mobile Service URL and key
+            mClient = new MobileServiceClient(
+                    "https://testandologoali.azurewebsites.net",
+                    activity);
+
+            // Extend timeout from default of 10s to 20s
+            mClient.setAndroidHttpClientFactory(() -> {
+                OkHttpClient client = new OkHttpClient();
+                client.setReadTimeout(20, TimeUnit.SECONDS);
+                client.setWriteTimeout(20, TimeUnit.SECONDS);
+                return client;
+            });
+
+            // Get the Mobile Service Table instance to use
+
+//            mToDoTable = mClient.getTable(ToDoItem.class);
+
+            // Offline Sync
+            //mToDoTable = mClient.getSyncTable("ToDoItem", ToDoItem.class);
+
+            //Init local storage
+            initLocalStore().get();
+
+        } catch (Exception e) {
+            Log.e(BancoDeDadosTeste.class.getName(), "Failed to initialize database connection", e);
+        }
+    }
+
+    //TODO
     public static ArrayList<Estabelecimento> selectEstabelecimentoByCidade(String cidade) {
         ArrayList<Estabelecimento> arrayListEstabelecimento = new ArrayList<>();
         if (cidade.isEmpty()) {
@@ -50,6 +125,7 @@ class BancoDeDadosTeste {
         return arrayListEstabelecimento;
     }
 
+    //TODO
     public static ArrayList<Estabelecimento> selectEstabelecimentoByAdmin(int userID) {
         ArrayList<Estabelecimento> arrayListEstabelecimento = new ArrayList<>();
         for (Estabelecimento e : estabelecimentos) {
@@ -60,6 +136,7 @@ class BancoDeDadosTeste {
         return arrayListEstabelecimento;
     }
 
+    //TODO
     public static Estabelecimento selectEstabelecimento(int id) {
         for (Estabelecimento e : estabelecimentos) {
             if (e.getmId() == id) {
@@ -69,6 +146,7 @@ class BancoDeDadosTeste {
         return null;
     }
 
+    //TODO
     public static Usuario selectAdministrador(int id) {
         for (Usuario a : usuarios) {
             if (a.getmIdUsuario() == id) {
@@ -78,6 +156,7 @@ class BancoDeDadosTeste {
         return null;
     }
 
+    //TODO
     public static Usuario selectAdministradorByEmail(String email) {
         for (Usuario a : usuarios) {
             if (a.getmEmail().equalsIgnoreCase(email)) {
@@ -88,6 +167,7 @@ class BancoDeDadosTeste {
     }
 
     /**
+     * //TODO
      * @param email
      * @return Estrutura com o resultado da autenticacao
      */
@@ -100,6 +180,7 @@ class BancoDeDadosTeste {
             return new AuthenticateUserReturn(1, user);
     }
 
+    //TODO
     public static class AuthenticateUserReturn {
         static final String USER_ID = "com.example.patinho.logoali.BancoDeDadosTeste.AuthenticateUserReturn.USER_ID";
         /**
@@ -125,6 +206,7 @@ class BancoDeDadosTeste {
         }
     }
 
+    //TODO
     public static Estabelecimento updateEstabelecimento(Estabelecimento in) {
         Estabelecimento estabelecimento = selectEstabelecimento(in.getmId());
         if (estabelecimento != null && LoginHandler.getUsuario().getmIdUsuario() == estabelecimento.getmIdAdministrador()) {
@@ -134,6 +216,7 @@ class BancoDeDadosTeste {
         return null;
     }
 
+    //TODO
     public static Estabelecimento createEstabelecimento(Estabelecimento in) {
 //        if (!LoginHandler.getUsuario().getmRole().equals(Usuario.Role.SUPPORT)) {
 //            return null;
@@ -156,6 +239,7 @@ class BancoDeDadosTeste {
         return newEst;
     }
 
+    //TODO
     public static void addFidelidade(int idUsuario, int idEstabelecimento) {
         Estabelecimento estabelecimento = selectEstabelecimento(idEstabelecimento);
         if (LoginHandler.getUsuario().getmIdUsuario() != estabelecimento.getmIdAdministrador()) {
@@ -169,6 +253,7 @@ class BancoDeDadosTeste {
         }
     }
 
+    //TODO
     public static int countFidelidade(int idUsuario, int idEstabelecimento) {
         for (Fidelidade f : fidelidades) {
             if (f.getmIdUsuario() == idUsuario && f.getmIdEstabelecimento() == idEstabelecimento) {
@@ -178,6 +263,7 @@ class BancoDeDadosTeste {
         return 0;
     }
 
+    //TODO
     public static Fidelidade selectFidelidade(int idUsuario, int idEstabelecimento) {
         for (Fidelidade f : fidelidades) {
             if (f.getmIdUsuario() == idUsuario && f.getmIdEstabelecimento() == idEstabelecimento) {
@@ -187,6 +273,7 @@ class BancoDeDadosTeste {
         return null;
     }
 
+    //TODO
     private static int getNextID() {
         int ret = -1;
         for (Estabelecimento e : estabelecimentos) {
@@ -195,5 +282,65 @@ class BancoDeDadosTeste {
             }
         }
         return ++ret;
+    }
+
+    private static class LocalStoreAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final MobileServiceClient mClient;
+
+        LocalStoreAsyncTask(MobileServiceClient mClient) {
+            this.mClient = mClient;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+
+                MobileServiceSyncContext syncContext = mClient.getSyncContext();
+
+                if (syncContext.isInitialized())
+                    return null;
+
+                SQLiteLocalStore localStore = new SQLiteLocalStore(mClient.getContext(), "OfflineStore", null, 1);
+
+                Map<String, ColumnDataType> tableDefinition = new HashMap<String, ColumnDataType>();
+                tableDefinition.put("id", ColumnDataType.String);
+                tableDefinition.put("text", ColumnDataType.String);
+                tableDefinition.put("complete", ColumnDataType.Boolean);
+
+                localStore.defineTable("ToDoItem", tableDefinition);
+
+                SimpleSyncHandler handler = new SimpleSyncHandler();
+
+                syncContext.initialize(localStore, handler).get();
+
+            } catch (final Exception e) {
+                Log.e(LocalStoreAsyncTask.class.getName(), "", e);
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Initialize local storage
+     * @return
+     * @throws MobileServiceLocalStoreException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    private AsyncTask<Void, Void, Void> initLocalStore() throws MobileServiceLocalStoreException, ExecutionException, InterruptedException {
+
+        AsyncTask<Void, Void, Void> task = new LocalStoreAsyncTask(mClient) ;
+
+        return runAsyncTask(task);
+    }
+
+    /**
+     * Run an ASync task on the corresponding executor
+     * @param task
+     * @return
+     */
+    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
+        return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

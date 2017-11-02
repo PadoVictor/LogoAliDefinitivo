@@ -4,7 +4,7 @@ android {
     buildToolsVersion '27.0.0'
     defaultConfig {
         applicationId "com.example.testandologoali"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -50,4 +50,3 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-
