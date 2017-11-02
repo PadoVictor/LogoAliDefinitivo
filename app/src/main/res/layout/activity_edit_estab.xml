@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="200sp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView">
+
+            <EditText
+                android:id="@+id/edit_text_nome_estabelecimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nome" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textInputLayout3">
+
+            <EditText
+                android:id="@+id/edit_text_telefone_estabelecimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Telefone"
+                android:inputType="phone" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textInputLayout4"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edit_text_rua_estabelecimento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Rua" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/edit_text_numero_estabelecimento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nº"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edit_text_bairro_estabelecimento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Bairro" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edit_text_cidade_estabelecimento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Cidade" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout2">
+
+            <EditText
+                android:id="@+id/edit_text_horario_estabelecimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Horário" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textInputLayout5">
+
+            <EditText
+                android:id="@+id/edit_text_servicos_estabelecimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout3"
+                android:ems="10"
+                android:hint="Serviços"
+                android:inputType="textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+
+
+
+    </RelativeLayout>
+
+</ScrollView>

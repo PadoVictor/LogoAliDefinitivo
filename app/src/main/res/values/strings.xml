@@ -1,0 +1,35 @@
+<resources>
+    <string name="add_textbox_hint">Add a ToDo item</string>
+    <string name="add_button_text">Add</string>
+    <string name="service_title">Mobile Apps </string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="checkbox_text">Item Text</string>
+
+    <string name="app_name">Logo Ali</string>
+    <string name="search_activity_label">Buscar</string>
+
+    <!--Main Activity-->
+    <string name="titulo_main_activity">Entre com a cidade:</string>
+    <string name="texto_para_edit_text_main_activity">Cidade</string>
+    <string name="botao_main_activity">Buscar</string>
+
+    <!--Login Activity-->
+    <string name="email_login_activity">Email:</string>
+    <string name="texto_para_digitar_email_login_activity">Digite seu Email</string>
+    <string name="senha_login_activity">Senha:</string>
+    <string name="texto_para_digitar_senha_login_activity">Digite sua senha</string>
+    <string name="botao_entrar_login_activity">Entrar</string>
+    <string name="esqueceu_senha_login_activity">Esqueceu a senha?</string>
+    <string name="criar_nova_conta_login_activity">Criar nova conta</string>
+    <string name="titulo_activity_estabelecimento">Meus Estabelecimentos</string>
+    <string name="edit">Editar</string>
+    <string name="sim">SIM</string>
+    <string name="nao">NÃO</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Button text -->
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
+    <string name="loading">Loading</string>
+</resources>

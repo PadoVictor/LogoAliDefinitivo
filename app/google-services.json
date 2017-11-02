@@ -1,0 +1,95 @@
+{
+  "project_info": {
+    "project_number": "184563704025",
+    "project_id": "firebase-logo-ali"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184563704025:android:d10d2e6aa5466a48",
+        "android_client_info": {
+          "package_name": "com.example.patinho.logoali"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184563704025-jn6jvua45qhg0u90utibl7fcq766dkc3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.patinho.logoali",
+            "certificate_hash": "2c821807fed875b3d6d58c47b8b1bf8ff2c97926"
+          }
+        },
+        {
+          "client_id": "184563704025-56udva0dtv8oijct8qi9m7r5tlhlfj89.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "184563704025-chrqaaoqvkva53a1g8cm5s6s3ufv64q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.patinho.logoali",
+            "certificate_hash": "c2eb3d54813b1e0fc24d9e63a58ecb832c905889"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs-VGSLwG3zWZVsRlCwGFSGlmUOFjdl10"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184563704025:android:d3fa3f8ec40eb597",
+        "android_client_info": {
+          "package_name": "com.example.testandologoali"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184563704025-odchn5rshco44tigbo2pfu4c41hmnesi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.testandologoali",
+            "certificate_hash": "2c821807fed875b3d6d58c47b8b1bf8ff2c97926"
+          }
+        },
+        {
+          "client_id": "184563704025-56udva0dtv8oijct8qi9m7r5tlhlfj89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs-VGSLwG3zWZVsRlCwGFSGlmUOFjdl10"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
