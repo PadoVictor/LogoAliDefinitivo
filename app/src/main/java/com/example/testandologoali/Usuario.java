@@ -2,8 +2,6 @@ package com.example.testandologoali;
 
 public class Usuario {
 
-    int a = 2;
-
     enum Role {
         ADMIN,
         USER,
