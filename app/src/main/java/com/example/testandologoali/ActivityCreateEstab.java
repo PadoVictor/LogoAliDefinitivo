@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.patinho.logoali.R;
+import com.example.testandologoali.db.Estabelecimento;
 
 /**
  * Created by Dener on 23/05/2017.
@@ -17,7 +18,7 @@ public class ActivityCreateEstab extends ActivityEditEstab {
     protected void onCreate(Bundle savedInstanceState) {
         createMode = true;
         super.onCreate(savedInstanceState);
-        estabelecimento = new Estabelecimento(-1,"","","","","","","","",LoginHandler.getUsuario().getmIdUsuario(),3,
+        estabelecimento = new Estabelecimento("", "", "", "", "", "", "", "", LoginHandler.getUsuario().getIdUsuario(), 3,
                 R.drawable.barbearia1, R.drawable.barbearia1_thumb);
         imagem = (ImageView) findViewById(R.id.imageView);
         imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
@@ -42,7 +43,7 @@ public class ActivityCreateEstab extends ActivityEditEstab {
         return true;
     }
 
-    private  void criarEstab() {
+    private void criarEstab() {
         setValuesFromText();
         BancoDeDadosTeste.createEstabelecimento(estabelecimento);
     }

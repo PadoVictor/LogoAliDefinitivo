@@ -10,14 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.patinho.logoali.R;
+import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.Usuario;
 
 import java.util.ArrayList;
 
-import static com.example.testandologoali.Usuario.Role.ADMIN;
-
 public class ActivityEstabelecimentos extends AppCompatActivity {
 
-    int adminID;
+    String adminID;
 
 
     @Override
@@ -25,7 +25,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estabelecimentos);
 
-        adminID = LoginHandler.getUsuario().getmIdUsuario();
+        adminID = LoginHandler.getUsuario().getIdUsuario();
 
         ArrayList<Estabelecimento> arrayListEstabelecimento = BancoDeDadosTeste.selectEstabelecimentoByAdmin(adminID);
         EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(ActivityEstabelecimentos.this, arrayListEstabelecimento);
@@ -37,7 +37,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
                 Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityDetalhe.class);
-                int idEstabelecimento = ((Estabelecimento) adapter.getItemAtPosition(position)).getmId();
+                String idEstabelecimento = ((Estabelecimento) adapter.getItemAtPosition(position)).getmId();
                 intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
                 startActivity(intent);
             }
@@ -55,8 +55,8 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if(id == R.id.pesquisar_estabelecimentos) {
-            if (ADMIN == LoginHandler.getUsuario().getmRole()) {
+        if (id == R.id.pesquisar_estabelecimentos) {
+            if (Usuario.ADMIN.equals(LoginHandler.getUsuario().getAcesso())) {
                 Intent intent = new Intent(ActivityEstabelecimentos.this, MainActivity.class);
                 startActivity(intent);
             }

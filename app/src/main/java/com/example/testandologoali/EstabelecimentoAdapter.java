@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.patinho.logoali.R;
+import com.example.testandologoali.db.Estabelecimento;
 
 import java.util.ArrayList;
 

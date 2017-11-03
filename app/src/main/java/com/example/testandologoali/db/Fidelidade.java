@@ -1,4 +1,4 @@
-package com.example.testandologoali;
+package com.example.testandologoali.db;
 
 /**
  * Created by Dener on 24/05/2017.
@@ -8,7 +8,8 @@ public class Fidelidade {
     int mIdUsuario;
     int mIdEstabelecimento;
     int mContagem = 1;
-    Fidelidade(int vIdUsuario, int vIdEstabelecimento) {
+
+    public Fidelidade(int vIdUsuario, int vIdEstabelecimento) {
         mIdUsuario = vIdUsuario;
         mIdEstabelecimento = vIdEstabelecimento;
     }

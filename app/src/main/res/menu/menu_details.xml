@@ -6,6 +6,6 @@
         android:id="@+id/adicionar_alarme"
         android:title="Adicionar Alarme"
         android:icon="@drawable/ic_alarm_white_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
 </menu>

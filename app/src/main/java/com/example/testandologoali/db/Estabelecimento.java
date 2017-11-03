@@ -1,9 +1,9 @@
-package com.example.testandologoali;
+package com.example.testandologoali.db;
 
 public class Estabelecimento {
 
-    private int mId;
-    private int mIdAdministrador;
+    private String mId;
+    private String mIdAdministrador;
     private String mNomeDoEstabelecimento;
     private String mRuaDoEstabelecimento;
     private String mNumeroDoEstabelecimento;
@@ -16,9 +16,9 @@ public class Estabelecimento {
     private int mImagemEstabelecimento;
     private int mImagemEstabelecimentoThumb;
 
-    public Estabelecimento(int id, String vNomeDoEstabelecimento, String vRuaDoEstabelecimento, String vNumeroDoEstabelecimento
+    public Estabelecimento(String id, String vNomeDoEstabelecimento, String vRuaDoEstabelecimento, String vNumeroDoEstabelecimento
             , String vBairroDoEstabelecimento, String vCidadeDoEstabelecimento, String vTelefoneDoEstabelecimento, String vServicos
-            , String vHorarioAtendimento, int vIdAdministrador, float vNotaEstabelecimento, int vImagemEstabelecimento, int vImagemEstabelecimentoThumb){
+            , String vHorarioAtendimento, String vIdAdministrador, float vNotaEstabelecimento, int vImagemEstabelecimento, int vImagemEstabelecimentoThumb) {
 
         mId = id;
         mIdAdministrador = vIdAdministrador;
@@ -35,7 +35,25 @@ public class Estabelecimento {
         mHorarioAtendimento = vHorarioAtendimento;
     }
 
-    public int getmId() {
+    public Estabelecimento(String vNomeDoEstabelecimento, String vRuaDoEstabelecimento, String vNumeroDoEstabelecimento
+            , String vBairroDoEstabelecimento, String vCidadeDoEstabelecimento, String vTelefoneDoEstabelecimento, String vServicos
+            , String vHorarioAtendimento, String vIdAdministrador, float vNotaEstabelecimento, int vImagemEstabelecimento, int vImagemEstabelecimentoThumb) {
+        mIdAdministrador = vIdAdministrador;
+        mNomeDoEstabelecimento = vNomeDoEstabelecimento;
+        mRuaDoEstabelecimento = vRuaDoEstabelecimento;
+        mNumeroDoEstabelecimento = vNumeroDoEstabelecimento;
+        mBairroDoEstabelecimento = vBairroDoEstabelecimento;
+        mCidadeDoEstabelecimento = vCidadeDoEstabelecimento;
+        mTelefoneDoEstabelecimento = vTelefoneDoEstabelecimento;
+        mImagemEstabelecimento = vImagemEstabelecimento;
+        mNotaEstabelecimento = vNotaEstabelecimento;
+        mImagemEstabelecimentoThumb = vImagemEstabelecimentoThumb;
+        mServicos = vServicos;
+        mHorarioAtendimento = vHorarioAtendimento;
+    }
+
+
+        public String getmId() {
         return mId;
     }
 
@@ -51,7 +69,7 @@ public class Estabelecimento {
         return mTelefoneDoEstabelecimento;
     }
 
-    public int getmIdAdministrador() {
+    public String getmIdAdministrador() {
         return mIdAdministrador;
     }
 

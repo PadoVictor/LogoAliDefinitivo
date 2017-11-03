@@ -22,7 +22,7 @@ public class QRReader extends AppCompatActivity implements ZXingScannerView.Resu
         QRScanner();
     }
 
-    public void QRScanner(){
+    public void QRScanner() {
         mScannerView = new ZXingScannerView(this);
         setContentView(mScannerView);
         mScannerView.setResultHandler(this);
@@ -43,8 +43,8 @@ public class QRReader extends AppCompatActivity implements ZXingScannerView.Resu
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("PONTOS FIDELIDADE");
         builder.setMessage("Gostaria de adicionar 1 ponto de fidelidade para " + nomeCliente + "?");
-        builder.setPositiveButton(R.string.sim, new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id){
+        builder.setPositiveButton(R.string.sim, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 int idCliente = Integer.valueOf(stringQR.split(":")[0]);
                 int idEstabelecimentoQR = getIntent().getIntExtra("idEstabelecimento", -1);
                 BancoDeDadosTeste.addFidelidade(idCliente, idEstabelecimentoQR);
@@ -52,8 +52,8 @@ public class QRReader extends AppCompatActivity implements ZXingScannerView.Resu
                 QRReader.this.finish();
             }
         });
-        builder.setNegativeButton(R.string.nao, new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id){
+        builder.setNegativeButton(R.string.nao, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 QRReader.this.finish();
             }
         });

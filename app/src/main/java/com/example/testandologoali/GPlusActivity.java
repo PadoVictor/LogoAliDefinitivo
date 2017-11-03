@@ -1,4 +1,5 @@
 package com.example.testandologoali;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,9 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.patinho.logoali.R;
+import com.example.testandologoali.db.Usuario;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -118,12 +118,12 @@ public class GPlusActivity extends AppCompatActivity implements
             Intent intent = null;
 
             if (loginReturn == 1) {
-                switch (LoginHandler.getUsuario().getmRole()) {
-                    case USER:
-                        //Se Role é user, ir à tela de pesquisa
+                switch (LoginHandler.getUsuario().getAcesso()) {
+                    case Usuario.USER:
+                        //Se Role é USER, ir à tela de pesquisa
                         intent = new Intent(GPlusActivity.this, MainActivity.class);
                         break;
-                    case ADMIN:
+                    case Usuario.ADMIN:
                         //Se Role é Admin, ir à tela de Meus Estabelecimentos
                         intent = new Intent(GPlusActivity.this, ActivityEstabelecimentos.class);
                         break;
@@ -189,14 +189,14 @@ public class GPlusActivity extends AppCompatActivity implements
 
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // If the USER's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
         } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // If the USER has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the USER silently.  Cross-device
             // single sign-on will occur in this branch.
             showProgressDialog();
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {

@@ -3,14 +3,13 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#71BCFA"
-        android:padding="6dip" >
+        android:padding="6dip">
 
         <TextView
             android:id="@+id/textViewTitle"
@@ -27,11 +26,11 @@
             android:layout_height="28dp" />
     </LinearLayout>
 
-     <LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#71BCFA"
-        android:padding="6dip"  >
+        android:padding="6dip">
 
         <EditText
             android:id="@+id/textNewToDo"
@@ -39,10 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/add_textbox_hint" >
+            android:hint="@string/add_textbox_hint">
 
             <requestFocus />
-       </EditText>
+        </EditText>
 
         <Button
             android:id="@+id/buttonAddToDo"
@@ -58,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/row_list_to_do"
-        android:padding="6dip" >
+        android:padding="6dip">
 
     </ListView>
 

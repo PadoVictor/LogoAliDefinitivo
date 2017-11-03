@@ -8,8 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.patinho.logoali.R;
-
-import static com.example.testandologoali.ActivityDetalhe.ID_ESTABELECIMENTO;
+import com.example.testandologoali.db.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,19 +32,14 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = null;
 
                 if (loginReturn == 1) {
-                    switch (LoginHandler.getUsuario().getmRole()) {
-                        case USER:
-                            //Se Role é user, ir à tela de pesquisa
+                    switch (LoginHandler.getUsuario().getAcesso()) {
+                        case Usuario.USER:
+                            //Se Role é USER, ir à tela de pesquisa
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                             break;
-                        case ADMIN:
+                        case Usuario.ADMIN:
                             //Se Role é Admin, ir à tela de Meus Estabelecimentos
                             intent = new Intent(LoginActivity.this, ActivityEstabelecimentos.class);
-                            break;
-                        case SUPPORT:
-                            //Se Role é Support, ir à tela de Criação de Estabelecimetos
-                            intent = new Intent(LoginActivity.this, ActivityCreateEstab.class);
-                            intent.putExtra(ID_ESTABELECIMENTO, -1);
                             break;
                     }
                     startActivity(intent);

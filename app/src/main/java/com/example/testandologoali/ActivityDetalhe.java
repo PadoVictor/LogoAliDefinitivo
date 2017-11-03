@@ -15,6 +15,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.patinho.logoali.R;
+import com.example.testandologoali.db.Estabelecimento;
+
+import java.util.Objects;
 
 public class ActivityDetalhe extends AppCompatActivity {
 
@@ -41,7 +44,7 @@ public class ActivityDetalhe extends AppCompatActivity {
         setContentView(R.layout.activity_detalhe);
 
         final Intent intent = getIntent();
-        final int idEstab = intent.getIntExtra(ID_ESTABELECIMENTO, -1);
+        final String idEstab = intent.getStringExtra(ID_ESTABELECIMENTO);
         refresh(idEstab);
     }
 
@@ -54,11 +57,11 @@ public class ActivityDetalhe extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if (estabelecimento.getmIdAdministrador() != LoginHandler.getUsuario().getmIdUsuario()) {
+        if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getIdUsuario())) {
             getMenuInflater().inflate(R.menu.menu_details, menu);
         }
 
-        if (estabelecimento.getmIdAdministrador() == LoginHandler.getUsuario().getmIdUsuario()) {
+        if (Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getIdUsuario())) {
             MenuItem edit_item_qr = menu.add(0, MenuItem_QRCamera, 0, "Câmera QR");
             edit_item_qr.setIcon(R.drawable.ic_qr_camera_24dp);
             edit_item_qr.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -89,7 +92,7 @@ public class ActivityDetalhe extends AppCompatActivity {
                 break;
             case MenuItem_EditId:
                 Intent intent = new Intent(ActivityDetalhe.this, ActivityEditEstab.class);
-                int idEstabelecimento = estabelecimento.getmId();
+                String idEstabelecimento = estabelecimento.getmId();
                 intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
                 startActivity(intent);
                 break;
@@ -103,7 +106,7 @@ public class ActivityDetalhe extends AppCompatActivity {
         return true;
     }
 
-    void refresh(int idEstab) {
+    void refresh(String idEstab) {
         estabelecimento = BancoDeDadosTeste.selectEstabelecimento(idEstab);
 
         imagem = (ImageView) findViewById(R.id.imagem_estabelecimento_detalhe);

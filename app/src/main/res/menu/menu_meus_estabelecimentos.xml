@@ -6,6 +6,6 @@
         android:id="@+id/pesquisar_estabelecimentos"
         android:title="Pesquisar Estabelecimentos"
         android:icon="@drawable/ic_search_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
 </menu>

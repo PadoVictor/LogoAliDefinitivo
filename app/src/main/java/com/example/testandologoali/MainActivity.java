@@ -12,11 +12,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.patinho.logoali.R;
+import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.Usuario;
 
 import java.util.ArrayList;
-
-import static com.example.testandologoali.Usuario.Role.ADMIN;
-import static com.example.testandologoali.Usuario.Role.USER;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
                         Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
-                        int idEstabelecimento = ((Estabelecimento) adapter.getItemAtPosition(position)).getmId();
+                        String idEstabelecimento = ((Estabelecimento) adapter.getItemAtPosition(position)).getmId();
                         intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
                         startActivity(intent);
                     }
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if(USER == LoginHandler.getUsuario().getmRole()){
+        if (Usuario.USER.equals(LoginHandler.getUsuario().getAcesso())) {
             MenuItem qrwriter_item = menu.add(0, MenuItem_QRWriter, 1, "Gerador de QR Code");
             qrwriter_item.setIcon(R.drawable.ic_qrwriter_24dp);
             qrwriter_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             fidelidade_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
 
-        if (ADMIN == LoginHandler.getUsuario().getmRole()) {
+        if (Usuario.USER.equals(LoginHandler.getUsuario().getAcesso())) {
             MenuItem edit_item = menu.add(0, MenuItem_MeusEstabelecimentos, 0, "Meus Estabelecimentos");
             edit_item.setIcon(R.drawable.ic_meus_estabelecimentos_24dp);
             edit_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case MenuItem_QRWriter:
-                String idCliente = LoginHandler.getUsuario().getmIdUsuario() + ":" + LoginHandler.getUsuario().getmNome();
+                String idCliente = LoginHandler.getUsuario().getIdUsuario() + ":" + LoginHandler.getUsuario().getNome();
                 Intent intent1 = new Intent(MainActivity.this, QRWriter.class);
                 intent1.putExtra("input", idCliente);
                 startActivity(intent1);
