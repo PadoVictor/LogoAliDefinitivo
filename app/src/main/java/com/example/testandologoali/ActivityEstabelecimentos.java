@@ -10,10 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Estabelecimentos;
 import com.example.testandologoali.db.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityEstabelecimentos extends AppCompatActivity {
 
@@ -27,7 +29,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
 
         adminID = LoginHandler.getUsuario().getIdUsuario();
 
-        ArrayList<Estabelecimento> arrayListEstabelecimento = BancoDeDadosTeste.selectEstabelecimentoByAdmin(adminID);
+        List<Estabelecimentos> arrayListEstabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimentoByAdmin(adminID);
         EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(ActivityEstabelecimentos.this, arrayListEstabelecimento);
         final ListView listView = (ListView) findViewById(R.id.listview_activity_estabelecimentos);
         listView.setVisibility(View.VISIBLE);
@@ -37,7 +39,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
                 Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityDetalhe.class);
-                String idEstabelecimento = ((Estabelecimento) adapter.getItemAtPosition(position)).getmId();
+                String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
                 intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
                 startActivity(intent);
             }

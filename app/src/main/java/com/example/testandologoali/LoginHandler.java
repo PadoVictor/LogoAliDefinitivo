@@ -1,5 +1,6 @@
 package com.example.testandologoali;
 
+import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Usuario;
 
 /**

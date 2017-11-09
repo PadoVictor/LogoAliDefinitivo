@@ -15,7 +15,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Estabelecimentos;
 
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public class ActivityDetalhe extends AppCompatActivity {
 
     private final int MenuItem_QRCamera = 2;
 
-    Estabelecimento estabelecimento;
+    Estabelecimentos estabelecimento;
 
     TextView nome, telefone, rua, numero, bairro, cidade, servicos, horario;
 
@@ -107,7 +108,7 @@ public class ActivityDetalhe extends AppCompatActivity {
     }
 
     void refresh(String idEstab) {
-        estabelecimento = BancoDeDadosTeste.selectEstabelecimento(idEstab);
+        estabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimento(idEstab);
 
         imagem = (ImageView) findViewById(R.id.imagem_estabelecimento_detalhe);
         imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());

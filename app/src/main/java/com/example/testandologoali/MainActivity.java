@@ -12,10 +12,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Estabelecimentos;
 import com.example.testandologoali.db.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextNomeDaCidade = (EditText) findViewById(R.id.edit_text_cidade_search_activity);
-                ArrayList<Estabelecimento> arrayListEstabelecimento = BancoDeDadosTeste.selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString());
+                List<Estabelecimentos> arrayListEstabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString());
                 EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, arrayListEstabelecimento);
                 final ListView listView = (ListView) findViewById(R.id.list_view_busca);
                 listView.setVisibility(View.VISIBLE);
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
                         Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
-                        String idEstabelecimento = ((Estabelecimento) adapter.getItemAtPosition(position)).getmId();
+                        String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
                         intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
                         startActivity(intent);
                     }

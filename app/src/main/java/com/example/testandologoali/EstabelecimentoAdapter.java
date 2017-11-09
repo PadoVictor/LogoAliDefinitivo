@@ -9,13 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.Estabelecimentos;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EstabelecimentoAdapter extends ArrayAdapter<Estabelecimento> {
+public class EstabelecimentoAdapter extends ArrayAdapter<Estabelecimentos> {
 
-    public EstabelecimentoAdapter(Context context, ArrayList<Estabelecimento> vEstabelecimentos) {
+    public EstabelecimentoAdapter(Context context, List<Estabelecimentos> vEstabelecimentos) {
         super(context, 0, vEstabelecimentos);
     }
 
@@ -27,7 +28,7 @@ public class EstabelecimentoAdapter extends ArrayAdapter<Estabelecimento> {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
 
-        Estabelecimento mEstabelecimentoAtual = getItem(position);
+        Estabelecimentos mEstabelecimentoAtual = getItem(position);
 
         ImageView mImagemDoEstabelecimento = (ImageView) listItemView.findViewById(R.id.imagem_estabelecimento_list_item);
         mImagemDoEstabelecimento.setImageResource(mEstabelecimentoAtual.getmImagemEstabelecimentoThumb());

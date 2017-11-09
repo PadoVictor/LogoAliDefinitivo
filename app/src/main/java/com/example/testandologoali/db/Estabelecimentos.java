@@ -1,59 +1,70 @@
 package com.example.testandologoali.db;
 
-public class Estabelecimento {
+import com.example.patinho.logoali.R;
 
+public class Estabelecimentos {
+
+    @com.google.gson.annotations.SerializedName("id")
     private String mId;
-    private String mIdAdministrador;
-    private String mNomeDoEstabelecimento;
-    private String mRuaDoEstabelecimento;
-    private String mNumeroDoEstabelecimento;
-    private String mBairroDoEstabelecimento;
-    private String mCidadeDoEstabelecimento;
-    private String mTelefoneDoEstabelecimento;
-    private String mServicos;
-    private String mHorarioAtendimento;
-    private float mNotaEstabelecimento;
-    private int mImagemEstabelecimento;
-    private int mImagemEstabelecimentoThumb;
 
-    public Estabelecimento(String id, String vNomeDoEstabelecimento, String vRuaDoEstabelecimento, String vNumeroDoEstabelecimento
-            , String vBairroDoEstabelecimento, String vCidadeDoEstabelecimento, String vTelefoneDoEstabelecimento, String vServicos
-            , String vHorarioAtendimento, String vIdAdministrador, float vNotaEstabelecimento, int vImagemEstabelecimento, int vImagemEstabelecimentoThumb) {
+    @com.google.gson.annotations.SerializedName("idadministrador")
+    private String mIdAdministrador;
+
+    @com.google.gson.annotations.SerializedName("nome")
+    private String mNomeDoEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("rua")
+    private String mRuaDoEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("numero")
+    private String mNumeroDoEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("bairro")
+    private String mBairroDoEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("cidade")
+    private String mCidadeDoEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("telefone")
+    private String mTelefoneDoEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("servicos")
+    private String mServicos;
+
+    @com.google.gson.annotations.SerializedName("horas")
+    private String mHorarioAtendimento;
+
+    @com.google.gson.annotations.SerializedName("dias")
+    private String mDiasAtendimento;
+
+//    private float mNotaEstabelecimento;
+//    private int mImagemEstabelecimento;
+//    private int mImagemEstabelecimentoThumb;
+
+    public Estabelecimentos(String id, String nome, String rua, String numero
+            , String bairro, String cidade, String telefone, String servicos
+            , String horas, String idadministrador, String dias) {
 
         mId = id;
-        mIdAdministrador = vIdAdministrador;
-        mNomeDoEstabelecimento = vNomeDoEstabelecimento;
-        mRuaDoEstabelecimento = vRuaDoEstabelecimento;
-        mNumeroDoEstabelecimento = vNumeroDoEstabelecimento;
-        mBairroDoEstabelecimento = vBairroDoEstabelecimento;
-        mCidadeDoEstabelecimento = vCidadeDoEstabelecimento;
-        mTelefoneDoEstabelecimento = vTelefoneDoEstabelecimento;
-        mImagemEstabelecimento = vImagemEstabelecimento;
-        mNotaEstabelecimento = vNotaEstabelecimento;
-        mImagemEstabelecimentoThumb = vImagemEstabelecimentoThumb;
-        mServicos = vServicos;
-        mHorarioAtendimento = vHorarioAtendimento;
+        mIdAdministrador = idadministrador;
+        mNomeDoEstabelecimento = nome;
+        mRuaDoEstabelecimento = rua;
+        mNumeroDoEstabelecimento = numero;
+        mBairroDoEstabelecimento = bairro;
+        mCidadeDoEstabelecimento = cidade;
+        mTelefoneDoEstabelecimento = telefone;
+//        mImagemEstabelecimento = vImagemEstabelecimento;
+//        mNotaEstabelecimento = vNotaEstabelecimento;
+//        mImagemEstabelecimentoThumb = vImagemEstabelecimentoThumb;
+        mServicos = servicos;
+        mHorarioAtendimento = horas;
+        mDiasAtendimento = dias;
     }
 
-    public Estabelecimento(String vNomeDoEstabelecimento, String vRuaDoEstabelecimento, String vNumeroDoEstabelecimento
-            , String vBairroDoEstabelecimento, String vCidadeDoEstabelecimento, String vTelefoneDoEstabelecimento, String vServicos
-            , String vHorarioAtendimento, String vIdAdministrador, float vNotaEstabelecimento, int vImagemEstabelecimento, int vImagemEstabelecimentoThumb) {
-        mIdAdministrador = vIdAdministrador;
-        mNomeDoEstabelecimento = vNomeDoEstabelecimento;
-        mRuaDoEstabelecimento = vRuaDoEstabelecimento;
-        mNumeroDoEstabelecimento = vNumeroDoEstabelecimento;
-        mBairroDoEstabelecimento = vBairroDoEstabelecimento;
-        mCidadeDoEstabelecimento = vCidadeDoEstabelecimento;
-        mTelefoneDoEstabelecimento = vTelefoneDoEstabelecimento;
-        mImagemEstabelecimento = vImagemEstabelecimento;
-        mNotaEstabelecimento = vNotaEstabelecimento;
-        mImagemEstabelecimentoThumb = vImagemEstabelecimentoThumb;
-        mServicos = vServicos;
-        mHorarioAtendimento = vHorarioAtendimento;
-    }
+    public Estabelecimentos() {}
 
 
-        public String getmId() {
+    public String getmId() {
         return mId;
     }
 
@@ -86,15 +97,16 @@ public class Estabelecimento {
     }
 
     public float getmNotaEstabelecimento() {
-        return mNotaEstabelecimento;
+        return 5f;
     }
 
     public int getmImagemEstabelecimento() {
-        return mImagemEstabelecimento;
+        if (mId.charAt(0) > '7') return R.drawable.barbearia1;
+        else return R.drawable.barbearia2;
     }
 
     public int getmImagemEstabelecimentoThumb() {
-        return mImagemEstabelecimentoThumb;
+        return 0;
     }
 
     public String getmServicos() {
@@ -138,14 +150,30 @@ public class Estabelecimento {
     }
 
     public void setmNotaEstabelecimento(float mNotaEstabelecimento) {
-        this.mNotaEstabelecimento = mNotaEstabelecimento;
+//        this.mNotaEstabelecimento = mNotaEstabelecimento;
     }
 
     public void setmImagemEstabelecimento(int mImagemEstabelecimento) {
-        this.mImagemEstabelecimento = mImagemEstabelecimento;
+//        this.mImagemEstabelecimento = mImagemEstabelecimento;
     }
 
     public void setmImagemEstabelecimentoThumb(int mImagemEstabelecimentoThumb) {
-        this.mImagemEstabelecimentoThumb = mImagemEstabelecimentoThumb;
+//        this.mImagemEstabelecimentoThumb = mImagemEstabelecimentoThumb;
+    }
+
+    public void setmId(String mId) {
+        this.mId = mId;
+    }
+
+    public void setmIdAdministrador(String mIdAdministrador) {
+        this.mIdAdministrador = mIdAdministrador;
+    }
+
+    public String getmDiasAtendimento() {
+        return mDiasAtendimento;
+    }
+
+    public void setmDiasAtendimento(String mDiasAtendimento) {
+        this.mDiasAtendimento = mDiasAtendimento;
     }
 }

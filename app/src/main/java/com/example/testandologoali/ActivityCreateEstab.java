@@ -6,7 +6,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Estabelecimentos;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Dener on 23/05/2017.
@@ -18,8 +21,10 @@ public class ActivityCreateEstab extends ActivityEditEstab {
     protected void onCreate(Bundle savedInstanceState) {
         createMode = true;
         super.onCreate(savedInstanceState);
-        estabelecimento = new Estabelecimento("", "", "", "", "", "", "", "", LoginHandler.getUsuario().getIdUsuario(), 3,
-                R.drawable.barbearia1, R.drawable.barbearia1_thumb);
+        estabelecimento = new Estabelecimentos("", "", "",
+                "", "", "",
+                "", "", "",
+                LoginHandler.getUsuario().getIdUsuario(), "");
         imagem = (ImageView) findViewById(R.id.imageView);
         imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
 
@@ -45,6 +50,10 @@ public class ActivityCreateEstab extends ActivityEditEstab {
 
     private void criarEstab() {
         setValuesFromText();
-        BancoDeDadosTeste.createEstabelecimento(estabelecimento);
+        try {
+            BancoDeDadosTeste.getInstance().insertEstabelecimento(estabelecimento);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

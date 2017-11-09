@@ -9,7 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Estabelecimento;
+import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Estabelecimentos;
 
 import static com.example.testandologoali.ActivityDetalhe.ID_ESTABELECIMENTO;
 
@@ -17,7 +18,7 @@ public class ActivityEditEstab extends AppCompatActivity {
 
     boolean createMode = false;
 
-    protected Estabelecimento estabelecimento;
+    protected Estabelecimentos estabelecimento;
 
     ImageView imagem;
 
@@ -29,7 +30,7 @@ public class ActivityEditEstab extends AppCompatActivity {
         setContentView(R.layout.activity_edit_estab);
 
         final Intent intent = getIntent();
-        estabelecimento = BancoDeDadosTeste.selectEstabelecimento(intent.getStringExtra(ID_ESTABELECIMENTO));
+        estabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimento(intent.getStringExtra(ID_ESTABELECIMENTO));
 
         if (estabelecimento != null && !createMode) {
             populateViews();
@@ -71,7 +72,7 @@ public class ActivityEditEstab extends AppCompatActivity {
         setValuesFromText();
 
         if (!createMode) {
-            BancoDeDadosTeste.updateEstabelecimento(estabelecimento);
+            BancoDeDadosTeste.getInstance().updateEstabelecimento(estabelecimento);
         }
 
         super.onPause();
