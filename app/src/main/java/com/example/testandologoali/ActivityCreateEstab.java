@@ -24,7 +24,7 @@ public class ActivityCreateEstab extends ActivityEditEstab {
         estabelecimento = new Estabelecimentos("", "", "",
                 "", "", "",
                 "", "", "",
-                LoginHandler.getUsuario().getIdUsuario(), "");
+                LoginHandler.getUsuario().getId(), "");
         imagem = (ImageView) findViewById(R.id.imageView);
         imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
 

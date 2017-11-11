@@ -12,9 +12,7 @@ import android.widget.ListView;
 import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
-import com.example.testandologoali.db.Usuario;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityEstabelecimentos extends AppCompatActivity {
@@ -27,7 +25,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estabelecimentos);
 
-        adminID = LoginHandler.getUsuario().getIdUsuario();
+        adminID = LoginHandler.getUsuario().getId();
 
         List<Estabelecimentos> arrayListEstabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimentoByAdmin(adminID);
         EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(ActivityEstabelecimentos.this, arrayListEstabelecimento);
@@ -58,7 +56,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.pesquisar_estabelecimentos) {
-            if (Usuario.ADMIN.equals(LoginHandler.getUsuario().getAcesso())) {
+            if (BancoDeDadosTeste.ADMIN.equals(LoginHandler.getUsuario().getAcesso())) {
                 Intent intent = new Intent(ActivityEstabelecimentos.this, MainActivity.class);
                 startActivity(intent);
             }

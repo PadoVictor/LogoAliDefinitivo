@@ -58,11 +58,11 @@ public class ActivityDetalhe extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getIdUsuario())) {
+        if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
             getMenuInflater().inflate(R.menu.menu_details, menu);
         }
 
-        if (Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getIdUsuario())) {
+        if (Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
             MenuItem edit_item_qr = menu.add(0, MenuItem_QRCamera, 0, "Câmera QR");
             edit_item_qr.setIcon(R.drawable.ic_qr_camera_24dp);
             edit_item_qr.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);

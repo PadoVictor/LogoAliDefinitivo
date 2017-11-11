@@ -1,12 +1,11 @@
 package com.example.testandologoali.db;
 
+import android.util.Log;
+
 public class Usuario {
 
-    public static final String ADMIN = "ADMIN";
-    public static final String USER = "USER";
-
     @com.google.gson.annotations.SerializedName("id")
-    private String mIdUsuario;
+    private String mId;
 
     @com.google.gson.annotations.SerializedName("nome")
     private String mNome;
@@ -18,20 +17,22 @@ public class Usuario {
     private String mAcesso;
 
     public Usuario(String id, String nome, String email, String acesso) {
-        setIdUsuario(id);
+        setId(id);
         setNome(nome);
         setEmail(email);
         setAcesso(acesso);
     }
 
-    public Usuario() {}
-
-    public String getIdUsuario() {
-        return mIdUsuario;
+    public Usuario() {
+        Log.d(Usuario.class.getName(),"Usuario criado");
     }
 
-    public void setIdUsuario(String idUsuario) {
-        this.mIdUsuario = idUsuario;
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
     }
 
     public String getNome() {
@@ -55,15 +56,13 @@ public class Usuario {
     }
 
     public void setAcesso(String acesso) {
-        if (ADMIN.equals(acesso) || USER.equals(acesso)) {
-            this.mAcesso = acesso;
-        } else {
-            throw new IllegalArgumentException("Acesso deve ser " + ADMIN + " ou " + USER + "!");
-        }
+        this.mAcesso = acesso;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Usuario && ((Usuario) o).getIdUsuario().equals(mIdUsuario);
+        return o instanceof Usuario && ((Usuario) o).getId().equals(mId);
     }
 }

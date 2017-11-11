@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Usuario;
+import com.example.testandologoali.db.BancoDeDadosTeste;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,11 +33,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (loginReturn == 1) {
                     switch (LoginHandler.getUsuario().getAcesso()) {
-                        case Usuario.USER:
+                        case BancoDeDadosTeste.USER:
                             //Se Role é USER, ir à tela de pesquisa
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                             break;
-                        case Usuario.ADMIN:
+                        case BancoDeDadosTeste.ADMIN:
                             //Se Role é Admin, ir à tela de Meus Estabelecimentos
                             intent = new Intent(LoginActivity.this, ActivityEstabelecimentos.class);
                             break;

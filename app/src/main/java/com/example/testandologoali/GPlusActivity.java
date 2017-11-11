@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.patinho.logoali.R;
-import com.example.testandologoali.db.Usuario;
+import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -119,11 +119,11 @@ public class GPlusActivity extends AppCompatActivity implements
 
             if (loginReturn == 1) {
                 switch (LoginHandler.getUsuario().getAcesso()) {
-                    case Usuario.USER:
+                    case BancoDeDadosTeste.USER:
                         //Se Role é USER, ir à tela de pesquisa
                         intent = new Intent(GPlusActivity.this, MainActivity.class);
                         break;
-                    case Usuario.ADMIN:
+                    case BancoDeDadosTeste.ADMIN:
                         //Se Role é Admin, ir à tela de Meus Estabelecimentos
                         intent = new Intent(GPlusActivity.this, ActivityEstabelecimentos.class);
                         break;

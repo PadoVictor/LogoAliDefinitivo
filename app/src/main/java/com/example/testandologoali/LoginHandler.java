@@ -11,7 +11,7 @@ public class LoginHandler {
     private static Usuario usuario;
 
     public static int login(String email) {
-        BancoDeDadosTeste.AuthenticateUserReturn userReturn = BancoDeDadosTeste.getInstance(null).authenticateUser(email);
+        BancoDeDadosTeste.AuthenticateUserReturn userReturn = BancoDeDadosTeste.getInstance().authenticateUser(email);
         usuario = userReturn.getUsuario();
         return userReturn.getErr();
     }
