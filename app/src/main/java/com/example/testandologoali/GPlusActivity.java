@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Usuario;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -113,38 +114,40 @@ public class GPlusActivity extends AppCompatActivity implements
             String personPhotoUrl = photoUrl == null ? "" : acct.getPhotoUrl().toString();
             String email = acct.getEmail();
 
-            int loginReturn = LoginHandler.login(email);
+            BancoDeDadosTeste.getInstance().selectAdministradorByEmail(email, result1 -> {
+                LoginHandler.setUsuario((Usuario) result1.getSingleObject());
 
-            Intent intent = null;
+                Intent intent = null;
 
-            if (loginReturn == 1) {
-                switch (LoginHandler.getUsuario().getAcesso()) {
-                    case BancoDeDadosTeste.USER:
-                        //Se Role é USER, ir à tela de pesquisa
-                        intent = new Intent(GPlusActivity.this, MainActivity.class);
-                        break;
-                    case BancoDeDadosTeste.ADMIN:
-                        //Se Role é Admin, ir à tela de Meus Estabelecimentos
-                        intent = new Intent(GPlusActivity.this, ActivityEstabelecimentos.class);
-                        break;
+                if (LoginHandler.getUsuario() != null) {
+                    switch (LoginHandler.getUsuario().getAcesso()) {
+                        case BancoDeDadosTeste.USER:
+                            //Se Role é USER, ir à tela de pesquisa
+                            intent = new Intent(GPlusActivity.this, MainActivity.class);
+                            break;
+                        case BancoDeDadosTeste.ADMIN:
+                            //Se Role é Admin, ir à tela de Meus Estabelecimentos
+                            intent = new Intent(GPlusActivity.this, ActivityEstabelecimentos.class);
+                            break;
+                    }
+                    startActivity(intent);
+                    /*
+                    Log.e(TAG, "Name: " + personName + ", email: " + email
+                            + ", Image: " + personPhotoUrl);
+
+                    txtName.setText(personName);
+                    txtEmail.setText(email);
+                    Glide.with(getApplicationContext()).load(personPhotoUrl)
+                            .thumbnail(0.5f)
+                            .crossFade()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(imgProfilePic);
+
+                    updateUI(true);
+                    */
                 }
-                startActivity(intent);
-            }
+            });
 
-            /*
-            Log.e(TAG, "Name: " + personName + ", email: " + email
-                    + ", Image: " + personPhotoUrl);
-
-            txtName.setText(personName);
-            txtEmail.setText(email);
-            Glide.with(getApplicationContext()).load(personPhotoUrl)
-                    .thumbnail(0.5f)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imgProfilePic);
-
-            updateUI(true);
-            */
         } else {
             // Signed out, show unauthenticated UI.
             updateUI(false);

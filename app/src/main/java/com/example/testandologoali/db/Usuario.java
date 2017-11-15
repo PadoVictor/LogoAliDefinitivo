@@ -5,22 +5,22 @@ import android.util.Log;
 public class Usuario {
 
     @com.google.gson.annotations.SerializedName("id")
-    private String mId;
+    private String id;
 
     @com.google.gson.annotations.SerializedName("nome")
-    private String mNome;
+    private String nome;
 
     @com.google.gson.annotations.SerializedName("email")
-    private String mEmail;
+    private String email;
 
-    @com.google.gson.annotations.SerializedName("acesso")
-    private String mAcesso;
+    @com.google.gson.annotations.SerializedName("Acesso")
+    private String acesso;
 
     public Usuario(String id, String nome, String email, String acesso) {
-        setId(id);
-        setNome(nome);
-        setEmail(email);
-        setAcesso(acesso);
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.acesso = acesso;
     }
 
     public Usuario() {
@@ -28,41 +28,41 @@ public class Usuario {
     }
 
     public String getId() {
-        return mId;
+        return id;
     }
 
     public void setId(String id) {
-        this.mId = id;
+        this.id = id;
     }
 
     public String getNome() {
-        return mNome;
+        return nome;
     }
 
     public void setNome(String nome) {
-        this.mNome = nome;
+        this.nome = nome;
     }
 
     public String getEmail() {
-        return mEmail;
+        return email;
     }
 
     public void setEmail(String email) {
-        this.mEmail = email;
+        this.email = email;
     }
 
     public String getAcesso() {
-        return mAcesso;
+        return acesso;
     }
 
     public void setAcesso(String acesso) {
-        this.mAcesso = acesso;
+        this.acesso = acesso;
     }
 
 
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Usuario && ((Usuario) o).getId().equals(mId);
+        return o instanceof Usuario && ((Usuario) o).getId().equals(id);
     }
 }

@@ -28,10 +28,6 @@
             android:name="com.example.testandologoali.MainActivity"
             android:label="@string/search_activity_label" />
 
-        <activity
-            android:name="com.example.testandologoali.LoginActivity"
-            android:label="Login" />
-
         <activity android:name="com.example.testandologoali.CadastroActivity" />
         <activity android:name="com.example.testandologoali.ActivityDetalhe" />
         <activity android:name="com.example.testandologoali.ActivityEstabelecimentos" />

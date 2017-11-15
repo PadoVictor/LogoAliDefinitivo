@@ -1,6 +1,5 @@
 package com.example.testandologoali;
 
-import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Usuario;
 
 /**
@@ -10,10 +9,8 @@ import com.example.testandologoali.db.Usuario;
 public class LoginHandler {
     private static Usuario usuario;
 
-    public static int login(String email) {
-        BancoDeDadosTeste.AuthenticateUserReturn userReturn = BancoDeDadosTeste.getInstance().authenticateUser(email);
-        usuario = userReturn.getUsuario();
-        return userReturn.getErr();
+    public static void setUsuario(Usuario usuario) {
+        LoginHandler.usuario = usuario;
     }
 
     public static void logout() {
