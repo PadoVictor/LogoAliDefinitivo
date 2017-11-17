@@ -13,8 +13,6 @@ import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
 
-import java.util.List;
-
 public class ActivityEstabelecimentos extends AppCompatActivity {
 
     String adminID;
@@ -27,21 +25,23 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
 
         adminID = LoginHandler.getUsuario().getId();
 
-        List<Estabelecimentos> arrayListEstabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimentoByAdmin(adminID);
-        EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(ActivityEstabelecimentos.this, arrayListEstabelecimento);
-        final ListView listView = (ListView) findViewById(R.id.listview_activity_estabelecimentos);
-        listView.setVisibility(View.VISIBLE);
-        listView.setAdapter(estAdapter);
+        BancoDeDadosTeste.getInstance().selectEstabelecimentoByAdmin(adminID, (BancoDeDadosTeste.QueryResult result) -> {
+            EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(ActivityEstabelecimentos.this, result.getObjectsList());
+            final ListView listView = (ListView) findViewById(R.id.listview_activity_estabelecimentos);
+            listView.setVisibility(View.VISIBLE);
+            listView.setAdapter(estAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
-                Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityDetalhe.class);
-                String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
-                intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
-                startActivity(intent);
-            }
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
+                    Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityDetalhe.class);
+                    String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
+                    intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
+                    startActivity(intent);
+                }
+            });
         });
+
     }
 
     @Override

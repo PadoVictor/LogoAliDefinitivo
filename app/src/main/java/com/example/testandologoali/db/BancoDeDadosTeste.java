@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.testandologoali.LoginHandler;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -20,10 +19,8 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
 
@@ -31,10 +28,6 @@ public class BancoDeDadosTeste {
 
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
-    /**
-     * Mobile Service Client reference
-     */
-    private MobileServiceClient mClient;
 
     private MobileServiceTable<Usuario> mTabelaUsuario;
 
@@ -65,7 +58,10 @@ public class BancoDeDadosTeste {
             // Create the Mobile Service Client instance, using the provided
 
             // Mobile Service URL and key
-            mClient = new MobileServiceClient(
+            /*
+      Mobile Service Client reference
+     */
+            MobileServiceClient mClient = new MobileServiceClient(
                     "https://testandologoali.azurewebsites.net",
                     activity).withFilter(new ProgressFilter());
 
@@ -86,105 +82,93 @@ public class BancoDeDadosTeste {
         }
     }
 
-    public List<Estabelecimentos> selectEstabelecimentoByCidade(String cidade) {
-        List<Estabelecimentos> estabelecimentos = new ArrayList<>();
-        try {
-            estabelecimentos = mTabelaEstab.where().subStringOf(cidade, "cidade").execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return estabelecimentos;
-    }
-
-    public List<Estabelecimentos> selectEstabelecimentoByAdmin(String userID) {
-        List<Estabelecimentos> estabelecimentos = new ArrayList<>();
-        try {
-            estabelecimentos = mTabelaEstab.where().field("idadministrador").eq(val(userID)).execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return estabelecimentos;
-    }
-
-    public Estabelecimentos selectEstabelecimento(String id) {
-        try {
-            List<Estabelecimentos> estabelecimentos = mTabelaEstab.where().field("id").
-                    eq(val(id)).execute().get();
-            if (estabelecimentos.size() == 1) {
-                return estabelecimentos.get(0);
-            } else if (estabelecimentos.size() > 0) {
-                Log.e(BancoDeDadosTeste.class.getName(), "Estabelecimento id " + id + " is not unique!");
+    @SuppressLint("StaticFieldLeak")
+    public void selectEstabelecimentoByCidade(String cidade, BancoDeDadosTesteListener listener) {
+        new QueryTask<Estabelecimentos>(listener) {
+            @Override
+            List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
+                return mTabelaEstab.where().subStringOf(cidade, "cidade").execute().get();
             }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        }.execute();
     }
 
-    public Estabelecimentos insertEstabelecimento(Estabelecimentos estabelecimento) throws ExecutionException, InterruptedException {
+    @SuppressLint("StaticFieldLeak")
+    public void selectEstabelecimentoByAdmin(String userID, BancoDeDadosTesteListener listener) {
+        new QueryTask<Estabelecimentos>(listener) {
+            @Override
+            List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
+                return mTabelaEstab.where().field("idadministrador").eq(val(userID)).execute().get();
+            }
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void selectEstabelecimento(String id, BancoDeDadosTesteListener listener) {
 //        if (!LoginHandler.getUsuario().getAcesso().equals(Usuario.ADMIN)) {
 //            return null;
 //        }
-//        synchronized (lock) {
-        return mTabelaEstab.insert(estabelecimento).get();
-//        }
+        new QueryTask<Estabelecimentos>(listener) {
+            @Override
+            List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
+                assertUnique = true;
+                return mTabelaEstab.where().field("id").eq(val(id)).execute().get();
+            }
+        }.execute();
     }
 
-    public Usuario selectAdministrador(String id) {
-        try {
-            List<Usuario> usuarios = mTabelaUsuario.where().field("id").
-                    eq(id).execute().get(20l, TimeUnit.SECONDS);
-            if (usuarios.size() == 1) {
-                return usuarios.get(0);
-            } else if (usuarios.size() > 0) {
-                Log.e(BancoDeDadosTeste.class.getName(), "User id " + id + " is not unique!");
+    @SuppressLint("StaticFieldLeak")
+    public void selectAdministrador(String id, BancoDeDadosTesteListener listener) {
+        new QueryTask<Usuario>(listener) {
+            @Override
+            List<Usuario> query() throws InterruptedException, ExecutionException {
+                assertUnique = true;
+                return mTabelaUsuario.where().field("id").eq(val(id)).execute().get();
             }
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        }.execute();
     }
 
     @SuppressLint("StaticFieldLeak")
     public void selectAdministradorByEmail(String email, BancoDeDadosTesteListener listener) {
         new QueryTask<Usuario>(listener) {
             @Override
-            protected QueryResult<Usuario> doInBackground(Void... voids) {
-                try {
-                    List<Usuario> usuarios = mTabelaUsuario.where().field("email").
-                            eq(val(email)).execute().get();
-                    if (usuarios.size() == 1) {
-                        return new QueryResult<>(true, usuarios);
-                    } else if (usuarios.size() > 0) {
-                        Log.e(BancoDeDadosTeste.class.getName(), "User email " + email + " is not unique!");
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-                return new QueryResult<>(false, null);
+            List<Usuario> query() throws InterruptedException, ExecutionException {
+                assertUnique = true;
+                return mTabelaUsuario.where().field("email").eq(val(email)).execute().get();
             }
         }.execute();
     }
 
-    public Usuario insertUsuario(Usuario usuario) throws ExecutionException, InterruptedException {
+    @SuppressLint("StaticFieldLeak")
+    public void insertUsuario(Usuario usuario, BancoDeDadosTesteListener listener) {
 //        if (!LoginHandler.getUsuario().getAcesso().equals(Usuario.ADMIN)) {
 //            return null;
 //        }
-        return mTabelaUsuario.insert(usuario).get();
-
+        new QueryTask<Usuario>(listener) {
+            @Override
+            List<Usuario> query() throws InterruptedException, ExecutionException {
+                return toList(mTabelaUsuario.insert(usuario).get());
+            }
+        }.execute();
     }
 
-    public Estabelecimentos updateEstabelecimento(Estabelecimentos in) {
-        Estabelecimentos estabelecimento = selectEstabelecimento(in.getmId());
-        if (estabelecimento != null && Objects.equals(LoginHandler.getUsuario().getId(), estabelecimento.getmIdAdministrador())) {
-            estabelecimento = in;
-            return estabelecimento;
-        }
-        return null;
+    @SuppressLint("StaticFieldLeak")
+    public void insertEstabelecimento(Estabelecimentos estabelecimento, BancoDeDadosTesteListener listener) {
+        new QueryTask<Estabelecimentos>(listener) {
+            @Override
+            List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
+                return toList(mTabelaEstab.insert(estabelecimento).get());
+            }
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void updateEstabelecimento(Estabelecimentos in, BancoDeDadosTesteListener listener) {
+        new QueryTask<Estabelecimentos>(listener) {
+            @Override
+            List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
+                return toList(mTabelaEstab.update(in).get());
+            }
+        }.execute();
     }
 
     //TODO
@@ -221,6 +205,8 @@ public class BancoDeDadosTeste {
         return null;
     }
 
+    // Fim das queries
+
     private class ProgressFilter implements ServiceFilter {
         @Override
         public ListenableFuture<ServiceFilterResponse> handleRequest(ServiceFilterRequest request, NextServiceFilterCallback nextServiceFilterCallback) {
@@ -244,15 +230,39 @@ public class BancoDeDadosTeste {
         }
     }
 
-    public static abstract class QueryTask<T> extends AsyncTask<Void, Void, QueryResult<T>> {
-        private final BancoDeDadosTesteListener listener;
+    public abstract static class QueryTask<T> extends AsyncTask<Void, Void, QueryResult<T>> {
+        private final BancoDeDadosTesteListener<T> listener;
 
-        protected QueryTask(BancoDeDadosTesteListener listener) {
+        boolean assertUnique = false;
+
+        QueryTask(BancoDeDadosTesteListener<T> listener) {
             this.listener = listener;
         }
 
         public void execute() {
             super.execute();
+        }
+
+        @Override
+        protected QueryResult<T> doInBackground(Void... voids) {
+            try {
+                QueryResult<T> result = new QueryResult<>(true, query());
+                if (!assertUnique || result.isUnique()) {
+                    return result;
+                }
+                Log.e(BancoDeDadosTeste.class.getName(), "Query result is not unique!");
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            return new QueryResult<>(false, null);
+        }
+
+        abstract List<T> query() throws InterruptedException, ExecutionException;
+
+        public List<T> toList(T result) {
+            ArrayList<T> resultList = new ArrayList<>();
+            resultList.add(result);
+            return resultList;
         }
 
         @Override
@@ -264,8 +274,8 @@ public class BancoDeDadosTeste {
         }
     }
 
-    public interface BancoDeDadosTesteListener {
-        void onQueryResult(QueryResult result);
+    public interface BancoDeDadosTesteListener<T> {
+        void onQueryResult(QueryResult<T> result);
     }
 
     public static class QueryResult<T> {
@@ -283,6 +293,10 @@ public class BancoDeDadosTeste {
 
         public T getSingleObject() {
             return (resultObjects == null || resultObjects.isEmpty()) ? null : resultObjects.get(0);
+        }
+
+        boolean isUnique() {
+            return resultObjects != null && resultObjects.size() == 1;
         }
     }
 }

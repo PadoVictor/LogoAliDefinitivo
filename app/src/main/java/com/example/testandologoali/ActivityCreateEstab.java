@@ -9,8 +9,6 @@ import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  * Created by Dener on 23/05/2017.
  */
@@ -50,10 +48,7 @@ public class ActivityCreateEstab extends ActivityEditEstab {
 
     private void criarEstab() {
         setValuesFromText();
-        try {
-            BancoDeDadosTeste.getInstance().insertEstabelecimento(estabelecimento);
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        BancoDeDadosTeste.getInstance().insertEstabelecimento(estabelecimento, result -> {
+        });
     }
 }

@@ -15,8 +15,6 @@ import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextNomeDaCidade;
@@ -35,21 +33,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextNomeDaCidade = (EditText) findViewById(R.id.edit_text_cidade_search_activity);
-                List<Estabelecimentos> arrayListEstabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString());
-                EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, arrayListEstabelecimento);
-                final ListView listView = (ListView) findViewById(R.id.list_view_busca);
-                listView.setVisibility(View.VISIBLE);
-                listView.setAdapter(estAdapter);
+                BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString(), result -> {
+                    EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, result.getObjectsList());
+                    final ListView listView = (ListView) findViewById(R.id.list_view_busca);
+                    listView.setVisibility(View.VISIBLE);
+                    listView.setAdapter(estAdapter);
 
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
-                        Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
-                        String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
-                        intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
-                        startActivity(intent);
-                    }
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
+                            Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
+                            String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
+                            intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
+                            startActivity(intent);
+                        }
+                    });
                 });
+
             }
         });
     }

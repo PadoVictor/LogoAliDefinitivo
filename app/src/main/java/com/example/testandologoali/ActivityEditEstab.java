@@ -30,11 +30,11 @@ public class ActivityEditEstab extends AppCompatActivity {
         setContentView(R.layout.activity_edit_estab);
 
         final Intent intent = getIntent();
-        estabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimento(intent.getStringExtra(ID_ESTABELECIMENTO));
-
-        if (estabelecimento != null && !createMode) {
-            populateViews();
-        }
+        BancoDeDadosTeste.getInstance().selectEstabelecimento(intent.getStringExtra(ID_ESTABELECIMENTO), result1 -> {
+            if ((this.estabelecimento = (Estabelecimentos) result1.getSingleObject()) != null && !createMode) {
+                populateViews();
+            }
+        });
     }
 
     private void populateViews() {
@@ -72,7 +72,8 @@ public class ActivityEditEstab extends AppCompatActivity {
         setValuesFromText();
 
         if (!createMode) {
-            BancoDeDadosTeste.getInstance().updateEstabelecimento(estabelecimento);
+            BancoDeDadosTeste.getInstance().updateEstabelecimento(estabelecimento, result -> {
+            });
         }
 
         super.onPause();

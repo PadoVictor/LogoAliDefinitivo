@@ -108,37 +108,39 @@ public class ActivityDetalhe extends AppCompatActivity {
     }
 
     void refresh(String idEstab) {
-        estabelecimento = BancoDeDadosTeste.getInstance().selectEstabelecimento(idEstab);
+        BancoDeDadosTeste.getInstance().selectEstabelecimento(idEstab, result -> {
+            if ((this.estabelecimento = (Estabelecimentos) result.getSingleObject()) != null) {
+                imagem = findViewById(R.id.imagem_estabelecimento_detalhe);
+                imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
 
-        imagem = (ImageView) findViewById(R.id.imagem_estabelecimento_detalhe);
-        imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
+                nome = findViewById(R.id.nome_estabelecimento_detalhe);
+                nome.setText(estabelecimento.getmNomeDoEstabelecimento());
 
-        nome = (TextView) findViewById(R.id.nome_estabelecimento_detalhe);
-        nome.setText(estabelecimento.getmNomeDoEstabelecimento());
+                telefone = findViewById(R.id.telefone_estabelecimento_detalhe);
+                telefone.setText(estabelecimento.getmTelefoneDoEstabelecimento());
 
-        telefone = (TextView) findViewById(R.id.telefone_estabelecimento_detalhe);
-        telefone.setText(estabelecimento.getmTelefoneDoEstabelecimento());
+                rua = findViewById(R.id.rua_estabelecimento_detalhe);
+                rua.setText(estabelecimento.getmRuaDoEstabelecimento());
 
-        rua = (TextView) findViewById(R.id.rua_estabelecimento_detalhe);
-        rua.setText(estabelecimento.getmRuaDoEstabelecimento());
+                numero = findViewById(R.id.numero_estabelecimento_detalhe);
+                numero.setText(String.valueOf(estabelecimento.getmNumeroDoEstabelecimento()));
 
-        numero = (TextView) findViewById(R.id.numero_estabelecimento_detalhe);
-        numero.setText(String.valueOf(estabelecimento.getmNumeroDoEstabelecimento()));
+                bairro = findViewById(R.id.bairro_estabelecimento_detalhe);
+                bairro.setText(estabelecimento.getmBairroDoEstabelecimento());
 
-        bairro = (TextView) findViewById(R.id.bairro_estabelecimento_detalhe);
-        bairro.setText(estabelecimento.getmBairroDoEstabelecimento());
+                cidade = findViewById(R.id.cidade_estabelecimento_detalhe);
+                cidade.setText(estabelecimento.getmCidadeDoEstabelecimento());
 
-        cidade = (TextView) findViewById(R.id.cidade_estabelecimento_detalhe);
-        cidade.setText(estabelecimento.getmCidadeDoEstabelecimento());
+                servicos = findViewById(R.id.serviços_estabelecimento_detalhe);
+                servicos.setText(estabelecimento.getmServicos());
 
-        servicos = (TextView) findViewById(R.id.serviços_estabelecimento_detalhe);
-        servicos.setText(estabelecimento.getmServicos());
+                horario = findViewById(R.id.horario_estabelecimento_detalhe);
+                horario.setText(estabelecimento.getmHorarioAtendimento());
 
-        horario = (TextView) findViewById(R.id.horario_estabelecimento_detalhe);
-        horario.setText(estabelecimento.getmHorarioAtendimento());
-
-        nota = (RatingBar) findViewById(R.id.rating_bar_detalhe);
-        nota.setRating(estabelecimento.getmNotaEstabelecimento());
+                nota = findViewById(R.id.rating_bar_detalhe);
+                nota.setRating(estabelecimento.getmNotaEstabelecimento());
+            }
+        });
     }
 
     @Override
