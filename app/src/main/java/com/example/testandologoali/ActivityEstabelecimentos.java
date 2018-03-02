@@ -2,11 +2,11 @@ package com.example.testandologoali;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.patinho.logoali.R;
@@ -25,23 +25,30 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
 
         adminID = LoginHandler.getUsuario().getId();
 
+        updateList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdicionarEstab);
+        fab.setOnClickListener(view -> {
+            // Click action
+            Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityEditEstab.class);
+            startActivity(intent);
+        });
+    }
+
+    private void updateList() {
         BancoDeDadosTeste.getInstance().selectEstabelecimentoByAdmin(adminID, (BancoDeDadosTeste.QueryResult result) -> {
             EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(ActivityEstabelecimentos.this, result.getObjectsList());
-            final ListView listView = (ListView) findViewById(R.id.listview_activity_estabelecimentos);
+            final ListView listView = findViewById(R.id.listview_activity_estabelecimentos);
             listView.setVisibility(View.VISIBLE);
             listView.setAdapter(estAdapter);
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
-                    Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityDetalhe.class);
-                    String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
-                    intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
-                    startActivity(intent);
-                }
+            listView.setOnItemClickListener((adapter, view, position, l) -> {
+                Intent intent = new Intent(ActivityEstabelecimentos.this, ActivityDetalhe.class);
+                String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
+                intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
+                startActivity(intent);
             });
         });
-
     }
 
     @Override
@@ -62,5 +69,11 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
     }
 }

@@ -16,18 +16,16 @@
         <activity
             android:name="com.example.testandologoali.GPlusActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name="com.example.testandologoali.SplashDevMedia">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.example.testandologoali.MainActivity"
             android:label="@string/search_activity_label" />
-
         <activity android:name="com.example.testandologoali.CadastroActivity" />
         <activity android:name="com.example.testandologoali.ActivityDetalhe" />
         <activity android:name="com.example.testandologoali.ActivityEstabelecimentos" />
@@ -35,7 +33,6 @@
         <activity android:name="com.example.testandologoali.ActivityCreateEstab" />
         <activity android:name="com.example.testandologoali.QRReader" />
         <activity android:name="com.example.testandologoali.QRWriter" />
-
         <activity android:name="com.example.testandologoali.ToDoActivity" />
     </application>
 

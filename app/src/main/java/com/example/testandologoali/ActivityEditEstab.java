@@ -30,39 +30,49 @@ public class ActivityEditEstab extends AppCompatActivity {
         setContentView(R.layout.activity_edit_estab);
 
         final Intent intent = getIntent();
-        BancoDeDadosTeste.getInstance().selectEstabelecimento(intent.getStringExtra(ID_ESTABELECIMENTO), result1 -> {
-            if ((this.estabelecimento = (Estabelecimentos) result1.getSingleObject()) != null && !createMode) {
-                populateViews();
-            }
-        });
+
+        //If no existing ID, create mode.
+        //Else, edit mode
+        String id = intent.getStringExtra(ID_ESTABELECIMENTO);
+        if (id != null) {
+            BancoDeDadosTeste.getInstance().selectEstabelecimento(id, result1 -> {
+                if ((this.estabelecimento = (Estabelecimentos) result1.getSingleObject()) != null && !createMode) {
+                    populateViews();
+                }
+            });
+        } else {
+            this.estabelecimento = new Estabelecimentos();
+            createMode = true;
+            populateViews();
+        }
     }
 
     private void populateViews() {
-        imagem = (ImageView) findViewById(R.id.imageView);
+        imagem = findViewById(R.id.imageView);
         imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
 
-        nome = (EditText) findViewById(R.id.edit_text_nome_estabelecimento);
+        nome = findViewById(R.id.edit_text_nome_estabelecimento);
         nome.setText(estabelecimento.getmNomeDoEstabelecimento());
 
-        telefone = (EditText) findViewById(R.id.edit_text_telefone_estabelecimento);
+        telefone = findViewById(R.id.edit_text_telefone_estabelecimento);
         telefone.setText(estabelecimento.getmTelefoneDoEstabelecimento());
 
-        rua = (EditText) findViewById(R.id.edit_text_rua_estabelecimento);
+        rua = findViewById(R.id.edit_text_rua_estabelecimento);
         rua.setText(estabelecimento.getmRuaDoEstabelecimento());
 
-        numero = (EditText) findViewById(R.id.edit_text_numero_estabelecimento);
+        numero = findViewById(R.id.edit_text_numero_estabelecimento);
         numero.setText(String.valueOf(estabelecimento.getmNumeroDoEstabelecimento()));
 
-        bairro = (EditText) findViewById(R.id.edit_text_bairro_estabelecimento);
+        bairro = findViewById(R.id.edit_text_bairro_estabelecimento);
         bairro.setText(estabelecimento.getmBairroDoEstabelecimento());
 
-        cidade = (EditText) findViewById(R.id.edit_text_cidade_estabelecimento);
+        cidade = findViewById(R.id.edit_text_cidade_estabelecimento);
         cidade.setText(estabelecimento.getmCidadeDoEstabelecimento());
 
-        servicos = (EditText) findViewById(R.id.edit_text_servicos_estabelecimento);
+        servicos = findViewById(R.id.edit_text_servicos_estabelecimento);
         servicos.setText(estabelecimento.getmServicos());
 
-        horario = (EditText) findViewById(R.id.edit_text_horario_estabelecimento);
+        horario = findViewById(R.id.edit_text_horario_estabelecimento);
         horario.setText(estabelecimento.getmHorarioAtendimento());
     }
 
@@ -71,7 +81,11 @@ public class ActivityEditEstab extends AppCompatActivity {
 
         setValuesFromText();
 
-        if (!createMode) {
+        if (createMode) {
+            estabelecimento.setmIdAdministrador(LoginHandler.getUsuario().getId());
+            BancoDeDadosTeste.getInstance().insertEstabelecimento(estabelecimento, result -> {
+            });
+        } else {
             BancoDeDadosTeste.getInstance().updateEstabelecimento(estabelecimento, result -> {
             });
         }
@@ -80,14 +94,14 @@ public class ActivityEditEstab extends AppCompatActivity {
     }
 
     void setValuesFromText() {
-        estabelecimento.setmNomeDoEstabelecimento(nome.getText().toString());
-        estabelecimento.setmTelefoneDoEstabelecimento(telefone.getText().toString());
-        estabelecimento.setmRuaDoEstabelecimento(rua.getText().toString());
-        estabelecimento.setmNumeroDoEstabelecimento(numero.getText().toString());
-        estabelecimento.setmBairroDoEstabelecimento(bairro.getText().toString());
-        estabelecimento.setmCidadeDoEstabelecimento(cidade.getText().toString());
-        estabelecimento.setmServicos(servicos.getText().toString());
-        estabelecimento.setmHorarioAtendimento(horario.getText().toString());
+        estabelecimento.setmNomeDoEstabelecimento(nome.getText() == null ? "" : nome.getText().toString());
+        estabelecimento.setmTelefoneDoEstabelecimento(telefone.getText() == null ? "" : telefone.getText().toString());
+        estabelecimento.setmRuaDoEstabelecimento(rua.getText() == null ? "" : rua.getText().toString());
+        estabelecimento.setmNumeroDoEstabelecimento(numero.getText() == null ? "" : numero.getText().toString());
+        estabelecimento.setmBairroDoEstabelecimento(bairro.getText() == null ? "" : bairro.getText().toString());
+        estabelecimento.setmCidadeDoEstabelecimento(cidade.getText() == null ? "" : cidade.getText().toString());
+        estabelecimento.setmServicos(servicos.getText() == null ? "" : servicos.getText().toString());
+        estabelecimento.setmHorarioAtendimento(horario.getText() == null ? "" : horario.getText().toString());
     }
 
     @Override

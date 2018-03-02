@@ -28,7 +28,9 @@ public class ActivityDetalhe extends AppCompatActivity {
 
     private final int MenuItem_QRCamera = 2;
 
-    Estabelecimentos estabelecimento;
+    private Menu menu;
+
+    volatile Estabelecimentos estabelecimento;
 
     TextView nome, telefone, rua, numero, bairro, cidade, servicos, horario;
 
@@ -52,25 +54,13 @@ public class ActivityDetalhe extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        refresh(estabelecimento.getmId());
+        if (estabelecimento != null)
+            refresh(estabelecimento.getmId());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
-            getMenuInflater().inflate(R.menu.menu_details, menu);
-        }
-
-        if (Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
-            MenuItem edit_item_qr = menu.add(0, MenuItem_QRCamera, 0, "Câmera QR");
-            edit_item_qr.setIcon(R.drawable.ic_qr_camera_24dp);
-            edit_item_qr.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            MenuItem edit_item = menu.add(0, MenuItem_EditId, 0, R.string.edit);
-            edit_item.setIcon(R.drawable.ic_mode_edit_white_24dp);
-            edit_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        }
+        this.menu = menu;
         return true;
     }
 
@@ -98,7 +88,7 @@ public class ActivityDetalhe extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case MenuItem_QRCamera:
-                int idEstabelecimentoQR = Integer.valueOf(estabelecimento.getmId());
+                String idEstabelecimentoQR = estabelecimento.getmId();
                 Intent intent1 = new Intent(ActivityDetalhe.this, QRReader.class);
                 intent1.putExtra("idEstabelecimento", idEstabelecimentoQR);
                 startActivity(intent1);
@@ -139,6 +129,20 @@ public class ActivityDetalhe extends AppCompatActivity {
 
                 nota = findViewById(R.id.rating_bar_detalhe);
                 nota.setRating(estabelecimento.getmNotaEstabelecimento());
+
+                if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
+                    getMenuInflater().inflate(R.menu.menu_details, menu);
+                }
+
+                if (Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
+                    MenuItem edit_item_qr = menu.add(0, MenuItem_QRCamera, 0, "Câmera QR");
+                    edit_item_qr.setIcon(R.drawable.ic_qr_camera_24dp);
+                    edit_item_qr.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+                    MenuItem edit_item = menu.add(0, MenuItem_EditId, 0, R.string.edit);
+                    edit_item.setIcon(R.drawable.ic_mode_edit_white_24dp);
+                    edit_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                }
             }
         });
     }

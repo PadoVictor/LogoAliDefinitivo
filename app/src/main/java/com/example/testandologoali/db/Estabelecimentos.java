@@ -101,7 +101,8 @@ public class Estabelecimentos {
     }
 
     public int getmImagemEstabelecimento() {
-        if (mId.charAt(0) > '7') return R.drawable.barbearia1;
+        if ((mId != null && mId.charAt(0) > '7') || Math.random() > 0.5d)
+            return R.drawable.barbearia1;
         else return R.drawable.barbearia2;
     }
 

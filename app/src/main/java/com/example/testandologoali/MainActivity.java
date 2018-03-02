@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             fidelidade_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
 
-        if (BancoDeDadosTeste.USER.equals(LoginHandler.getUsuario().getAcesso())) {
+        if (BancoDeDadosTeste.ADMIN.equals(LoginHandler.getUsuario().getAcesso())) {
             MenuItem edit_item = menu.add(0, MenuItem_MeusEstabelecimentos, 0, "Meus Estabelecimentos");
             edit_item.setIcon(R.drawable.ic_meus_estabelecimentos_24dp);
             edit_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);

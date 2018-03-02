@@ -62,7 +62,7 @@ public class BancoDeDadosTeste {
       Mobile Service Client reference
      */
             MobileServiceClient mClient = new MobileServiceClient(
-                    "https://testandologoali.azurewebsites.net",
+                    "https://logoali2.azurewebsites.net/",
                     activity).withFilter(new ProgressFilter());
 
             // Extend timeout from default of 10s to 20s
@@ -87,7 +87,8 @@ public class BancoDeDadosTeste {
         new QueryTask<Estabelecimentos>(listener) {
             @Override
             List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
-                return mTabelaEstab.where().subStringOf(cidade, "cidade").execute().get();
+                return mTabelaEstab.where().field("cidade").eq(val(cidade)).execute().get();
+//                return mTabelaEstab.where().subStringOf(cidade, "cidade").execute().get();
             }
         }.execute();
     }

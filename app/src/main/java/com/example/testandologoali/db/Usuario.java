@@ -13,7 +13,7 @@ public class Usuario {
     @com.google.gson.annotations.SerializedName("email")
     private String email;
 
-    @com.google.gson.annotations.SerializedName("Acesso")
+    @com.google.gson.annotations.SerializedName("acesso")
     private String acesso;
 
     public Usuario(String id, String nome, String email, String acesso) {

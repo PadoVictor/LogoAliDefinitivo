@@ -1,5 +1,6 @@
 package com.example.testandologoali;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -115,36 +116,13 @@ public class GPlusActivity extends AppCompatActivity implements
             String email = acct.getEmail();
 
             BancoDeDadosTeste.getInstance().selectAdministradorByEmail(email, result1 -> {
-                LoginHandler.setUsuario((Usuario) result1.getSingleObject());
 
-                Intent intent = null;
-
-                if (LoginHandler.getUsuario() != null) {
-                    switch (LoginHandler.getUsuario().getAcesso()) {
-                        case BancoDeDadosTeste.USER:
-                            //Se Role é USER, ir à tela de pesquisa
-                            intent = new Intent(GPlusActivity.this, MainActivity.class);
-                            break;
-                        case BancoDeDadosTeste.ADMIN:
-                            //Se Role é Admin, ir à tela de Meus Estabelecimentos
-                            intent = new Intent(GPlusActivity.this, ActivityEstabelecimentos.class);
-                            break;
-                    }
-                    startActivity(intent);
-                    /*
-                    Log.e(TAG, "Name: " + personName + ", email: " + email
-                            + ", Image: " + personPhotoUrl);
-
-                    txtName.setText(personName);
-                    txtEmail.setText(email);
-                    Glide.with(getApplicationContext()).load(personPhotoUrl)
-                            .thumbnail(0.5f)
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imgProfilePic);
-
-                    updateUI(true);
-                    */
+                //Se usuário não existe, criar
+                if (result1.getSingleObject() == null) {
+                    createUserDialog(personName, email);
+                    return;
+                } else {
+                    logIn((Usuario) result1.getSingleObject());
                 }
             });
 
@@ -154,6 +132,53 @@ public class GPlusActivity extends AppCompatActivity implements
 
         }
 
+    }
+
+    private void createUserDialog(String name, String email) {
+        Usuario user = new Usuario();
+        user.setNome(name);
+        user.setEmail(email);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Você é um cliente ou dono de estabelecimento?")
+                .setTitle("Bem vindo!")
+                .setPositiveButton("Cliente", (dialog, which) -> {
+                            user.setAcesso(BancoDeDadosTeste.USER);
+                            createUserOnBackend(user);
+                        }
+                )
+                .setNegativeButton("Dono", (dialog, which) -> {
+                    user.setAcesso(BancoDeDadosTeste.ADMIN);
+                    createUserOnBackend(user);
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void createUserOnBackend(Usuario user) {
+        BancoDeDadosTeste.getInstance(null).insertUsuario(user, result -> BancoDeDadosTeste.getInstance().selectAdministradorByEmail(user.getEmail(), result1 -> logIn((Usuario) result1.getSingleObject())));
+    }
+
+
+    private void logIn(Usuario usuario) {
+        LoginHandler.setUsuario(usuario);
+
+        Intent intent = null;
+
+        if (LoginHandler.getUsuario() != null) {
+            switch (LoginHandler.getUsuario().getAcesso()) {
+                case BancoDeDadosTeste.USER:
+                    //Se Role é USER, ir à tela de pesquisa
+                    intent = new Intent(GPlusActivity.this, MainActivity.class);
+                    break;
+                case BancoDeDadosTeste.ADMIN:
+                    //Se Role é Admin, ir à tela de Meus Estabelecimentos
+                    intent = new Intent(GPlusActivity.this, ActivityEstabelecimentos.class);
+                    break;
+            }
+            startActivity(intent);
+        }
     }
 
     @Override
