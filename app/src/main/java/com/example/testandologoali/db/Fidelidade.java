@@ -1,32 +1,42 @@
 package com.example.testandologoali.db;
 
-/**
- * Created by Dener on 24/05/2017.
- */
-
 public class Fidelidade {
-    int mIdUsuario;
-    int mIdEstabelecimento;
-    int mContagem = 1;
 
-    public Fidelidade(int vIdUsuario, int vIdEstabelecimento) {
-        mIdUsuario = vIdUsuario;
-        mIdEstabelecimento = vIdEstabelecimento;
+    @com.google.gson.annotations.SerializedName("id")
+    private String id;
+
+    @com.google.gson.annotations.SerializedName("idestabelecimento")
+    private String idEstabelecimento;
+
+    @com.google.gson.annotations.SerializedName("idusuario")
+    private String idUsuario;
+
+    @com.google.gson.annotations.SerializedName("contagem")
+    private String contagem;
+
+    public Fidelidade(String id, String idusuario, String idestabelecimento, String contagem) {
+        this.id = id;
+        this.idUsuario = idusuario;
+        this.idEstabelecimento = idestabelecimento;
+        this.contagem = contagem;
     }
 
-    public int getmIdUsuario() {
-        return mIdUsuario;
+    public String getmIdUsuario() {
+        return idUsuario;
     }
 
-    public int getmIdEstabelecimento() {
-        return mIdEstabelecimento;
+    public String getmIdEstabelecimento() {
+        return idEstabelecimento;
     }
 
     public int getmContagem() {
-        return mContagem;
+        return Integer.valueOf(contagem);
     }
 
     public int addContagem() {
-        return ++mContagem;
+        int contagemInt = Integer.valueOf(contagem);
+        contagemInt++;
+        contagem = String.valueOf(contagemInt);
+        return contagemInt;
     }
 }

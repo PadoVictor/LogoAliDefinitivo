@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(MainActivity.this, QRWriter.class);
                 intent1.putExtra("input", idCliente);
                 startActivity(intent1);
+                break;
+            case MenuItem_Fidelidade:
+                Intent intent2 = new Intent(MainActivity.this, FidelidadeActivity.class);
+                startActivity(intent2);
         }
         return true;
     }

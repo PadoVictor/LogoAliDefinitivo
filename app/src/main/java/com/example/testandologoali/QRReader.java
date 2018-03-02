@@ -4,10 +4,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
+import com.example.testandologoali.db.Fidelidade;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -46,10 +46,19 @@ public class QRReader extends AppCompatActivity implements ZXingScannerView.Resu
         builder.setMessage("Gostaria de adicionar 1 ponto de fidelidade para " + nomeCliente + "?");
         builder.setPositiveButton(R.string.sim, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                int idCliente = Integer.valueOf(stringQR.split(":")[0]);
-                int idEstabelecimentoQR = getIntent().getIntExtra("idEstabelecimento", -1);
-                BancoDeDadosTeste.addFidelidade(idCliente, idEstabelecimentoQR);
-                Log.i("fidelidade", "Pontuação:" + BancoDeDadosTeste.countFidelidade(idCliente, idEstabelecimentoQR));
+                String idCliente = stringQR.split(":")[0];
+                String idEstabelecimentoQR = getIntent().getStringExtra("idEstabelecimento");
+                BancoDeDadosTeste.getInstance().getFidelidade(idCliente, idEstabelecimentoQR, result -> {
+                    Fidelidade fidelidade = (Fidelidade) result.getSingleObject();
+
+                    if (fidelidade == null) {
+                        BancoDeDadosTeste.getInstance().createFidelidade(new Fidelidade(null, idCliente, idEstabelecimentoQR, "1"), result1 -> {
+                        });
+                    } else {
+                        BancoDeDadosTeste.getInstance().addFidelidade(fidelidade, result1 -> {
+                        });
+                    }
+                });
                 QRReader.this.finish();
             }
         });
@@ -62,4 +71,3 @@ public class QRReader extends AppCompatActivity implements ZXingScannerView.Resu
         alert1.show();
     }
 }
-

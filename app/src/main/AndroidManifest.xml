@@ -34,6 +34,7 @@
         <activity android:name="com.example.testandologoali.QRReader" />
         <activity android:name="com.example.testandologoali.QRWriter" />
         <activity android:name="com.example.testandologoali.ToDoActivity" />
+        <activity android:name="com.example.testandologoali.FidelidadeActivity"></activity>
     </application>
 
 </manifest>

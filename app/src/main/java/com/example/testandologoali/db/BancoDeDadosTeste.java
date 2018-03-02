@@ -30,8 +30,9 @@ public class BancoDeDadosTeste {
     public static final String USER = "USER";
 
     private MobileServiceTable<Usuario> mTabelaUsuario;
-
     private MobileServiceTable<Estabelecimentos> mTabelaEstab;
+    private MobileServiceTable<Fidelidade> mTabelaFidelidade;
+
     private static ArrayList<Fidelidade> fidelidades = new ArrayList<>();
 
     //    private static final Object lock = new Object();
@@ -76,6 +77,7 @@ public class BancoDeDadosTeste {
             // Get the Mobile Service Table instance to use
             mTabelaEstab = mClient.getTable(Estabelecimentos.class);
             mTabelaUsuario = mClient.getTable(Usuario.class);
+            mTabelaFidelidade = mClient.getTable(Fidelidade.class);
 
         } catch (Exception e) {
             Log.e(BancoDeDadosTeste.class.getName(), "Failed to initialize database connection", e);
@@ -173,37 +175,57 @@ public class BancoDeDadosTeste {
     }
 
     //TODO
-    public static void addFidelidade(int idUsuario, int idEstabelecimento) {
-//        Estabelecimentos estabelecimento = selectEstabelecimento(idEstabelecimento);
-//        if (LoginHandler.getUsuario().getId() != estabelecimento.getmIdAdministrador()) {
-//            return;
-//        }
-//        int count = countFidelidade(idUsuario, idEstabelecimento);
-//        if (count == 0) {
-//            fidelidades.add(new Fidelidade(idUsuario, idEstabelecimento));
-//        } else {
-//            selectFidelidade(idUsuario, idEstabelecimento).addContagem();
-//        }
+    @SuppressLint("StaticFieldLeak")
+    public void addFidelidade(Fidelidade fidelidade, BancoDeDadosTesteListener listener) {
+        new QueryTask<Fidelidade>(listener) {
+            @Override
+            List<Fidelidade> query() throws InterruptedException, ExecutionException {
+                fidelidade.addContagem();
+                return toList(mTabelaFidelidade.update(fidelidade).get());
+            }
+        }.execute();
     }
 
     //TODO
-    public static int countFidelidade(int idUsuario, int idEstabelecimento) {
-        for (Fidelidade f : fidelidades) {
-            if (f.getmIdUsuario() == idUsuario && f.getmIdEstabelecimento() == idEstabelecimento) {
-                return f.getmContagem();
+    @SuppressLint("StaticFieldLeak")
+    public void createFidelidade(Fidelidade fidelidade, BancoDeDadosTesteListener listener) {
+        new QueryTask<Fidelidade>(listener) {
+            @Override
+            List<Fidelidade> query() throws InterruptedException, ExecutionException {
+                return toList(mTabelaFidelidade.insert(fidelidade).get());
             }
-        }
-        return 0;
+        }.execute();
     }
 
     //TODO
-    public static Fidelidade selectFidelidade(int idUsuario, int idEstabelecimento) {
-        for (Fidelidade f : fidelidades) {
-            if (f.getmIdUsuario() == idUsuario && f.getmIdEstabelecimento() == idEstabelecimento) {
-                return f;
+    @SuppressLint("StaticFieldLeak")
+    public void getFidelidade(String idUsuario, String idEstabelecimento, BancoDeDadosTesteListener listener) {
+        new QueryTask<Fidelidade>(listener) {
+            @Override
+            List<Fidelidade> query() throws InterruptedException, ExecutionException {
+                assertUnique = true;
+                return mTabelaFidelidade
+                        .where()
+                        .field("idestabelecimento")
+                        .eq(val(idEstabelecimento))
+                        .and()
+                        .field("idusuario")
+                        .eq(val(idUsuario)).execute().get();
             }
-        }
-        return null;
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void selectFidelidadeByUsuario(String idUsuario, BancoDeDadosTesteListener listener) {
+        new QueryTask<Fidelidade>(listener) {
+            @Override
+            List<Fidelidade> query() throws InterruptedException, ExecutionException {
+                return mTabelaFidelidade
+                        .where()
+                        .field("idusuario")
+                        .eq(val(idUsuario)).execute().get();
+            }
+        }.execute();
     }
 
     // Fim das queries
