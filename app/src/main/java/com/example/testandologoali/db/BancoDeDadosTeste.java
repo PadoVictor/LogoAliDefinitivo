@@ -32,8 +32,7 @@ public class BancoDeDadosTeste {
     private MobileServiceTable<Usuario> mTabelaUsuario;
     private MobileServiceTable<Estabelecimentos> mTabelaEstab;
     private MobileServiceTable<Fidelidade> mTabelaFidelidade;
-
-    private static ArrayList<Fidelidade> fidelidades = new ArrayList<>();
+    private MobileServiceTable<Nota> mTabelaNota;
 
     //    private static final Object lock = new Object();
     private static BancoDeDadosTeste instance = null;
@@ -78,6 +77,7 @@ public class BancoDeDadosTeste {
             mTabelaEstab = mClient.getTable(Estabelecimentos.class);
             mTabelaUsuario = mClient.getTable(Usuario.class);
             mTabelaFidelidade = mClient.getTable(Fidelidade.class);
+            mTabelaNota = mClient.getTable(Nota.class);
 
         } catch (Exception e) {
             Log.e(BancoDeDadosTeste.class.getName(), "Failed to initialize database connection", e);
@@ -186,7 +186,6 @@ public class BancoDeDadosTeste {
         }.execute();
     }
 
-    //TODO
     @SuppressLint("StaticFieldLeak")
     public void createFidelidade(Fidelidade fidelidade, BancoDeDadosTesteListener listener) {
         new QueryTask<Fidelidade>(listener) {
@@ -197,7 +196,6 @@ public class BancoDeDadosTeste {
         }.execute();
     }
 
-    //TODO
     @SuppressLint("StaticFieldLeak")
     public void getFidelidade(String idUsuario, String idEstabelecimento, BancoDeDadosTesteListener listener) {
         new QueryTask<Fidelidade>(listener) {
@@ -226,6 +224,46 @@ public class BancoDeDadosTeste {
                         .eq(val(idUsuario)).execute().get();
             }
         }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void getNota(String idUsuario, String idEstabelecimento, BancoDeDadosTesteListener listener) {
+        new QueryTask<Nota>(listener) {
+            @Override
+            List<Nota> query() throws InterruptedException, ExecutionException {
+                assertUnique = true;
+                return mTabelaNota
+                        .where()
+                        .field("idestabelecimento")
+                        .eq(val(idEstabelecimento))
+                        .and()
+                        .field("idcliente")
+                        .eq(val(idUsuario)).execute().get();
+            }
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void createOrUpdateNota(Nota nota, BancoDeDadosTesteListener listener) {
+        BancoDeDadosTeste.getInstance().getNota(nota.getIdUsuario(), nota.getIdEstabelecimento(), result -> {
+            Nota nota1 = (Nota) result.getSingleObject();
+
+            if (nota1 == null) {
+                new QueryTask<Nota>(listener) {
+                    @Override
+                    List<Nota> query() throws InterruptedException, ExecutionException {
+                        return toList(mTabelaNota.insert(nota).get());
+                    }
+                }.execute();
+            } else {
+                new QueryTask<Nota>(listener) {
+                    @Override
+                    List<Nota> query() throws InterruptedException, ExecutionException {
+                        return toList(mTabelaNota.update(nota).get());
+                    }
+                }.execute();
+            }
+        });
     }
 
     // Fim das queries

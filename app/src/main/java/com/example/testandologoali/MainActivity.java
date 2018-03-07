@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -42,28 +41,22 @@ public class MainActivity extends AppCompatActivity {
 
         Button mButtonBuscar = findViewById(R.id.botao_buscar_search_activity);
 
-        mButtonBuscar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextNomeDaCidade = findViewById(R.id.edit_text_cidade_search_activity);
-                BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString(), result -> {
-                    EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, result.getObjectsList());
-                    final ListView listView = findViewById(R.id.list_view_busca);
-                    listView.setVisibility(View.VISIBLE);
-                    listView.setAdapter(estAdapter);
+        mButtonBuscar.setOnClickListener(v -> {
+            editTextNomeDaCidade = findViewById(R.id.edit_text_cidade_search_activity);
+            BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString(), result -> {
+                EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, result.getObjectsList());
+                final ListView listView = findViewById(R.id.list_view_busca);
+                listView.setVisibility(View.VISIBLE);
+                listView.setAdapter(estAdapter);
 
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapter, View view, int position, long l) {
-                            Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
-                            String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
-                            intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
-                            startActivity(intent);
-                        }
-                    });
+                listView.setOnItemClickListener((adapter, view, position, l) -> {
+                    Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
+                    String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
+                    intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
+                    startActivity(intent);
                 });
+            });
 
-            }
         });
     }
 

@@ -96,14 +96,16 @@ public class Estabelecimentos {
         return mCidadeDoEstabelecimento;
     }
 
-    public float getmNotaEstabelecimento() {
-        return 5f;
-    }
-
     public int getmImagemEstabelecimento() {
-        if ((mId != null && mId.charAt(0) > '7') || Math.random() > 0.5d)
-            return R.drawable.barbearia1;
-        else return R.drawable.barbearia2;
+        if (mId == null) {
+            if (Math.random() > 0.5d)
+                return R.drawable.barbearia1;
+            else return R.drawable.barbearia2;
+        } else {
+            if (mId.charAt(0) > '7')
+                return R.drawable.barbearia1;
+            else return R.drawable.barbearia2;
+        }
     }
 
     public int getmImagemEstabelecimentoThumb() {
@@ -148,10 +150,6 @@ public class Estabelecimentos {
 
     public void setmHorarioAtendimento(String mHorarioAtendimento) {
         this.mHorarioAtendimento = mHorarioAtendimento;
-    }
-
-    public void setmNotaEstabelecimento(float mNotaEstabelecimento) {
-//        this.mNotaEstabelecimento = mNotaEstabelecimento;
     }
 
     public void setmImagemEstabelecimento(int mImagemEstabelecimento) {

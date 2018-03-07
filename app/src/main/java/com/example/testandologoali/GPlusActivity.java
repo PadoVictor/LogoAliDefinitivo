@@ -178,6 +178,10 @@ public class GPlusActivity extends AppCompatActivity implements
                     break;
             }
             startActivity(intent);
+
+            if (mProgressDialog != null)
+                mProgressDialog.dismiss();
+
             finish();
         }
     }

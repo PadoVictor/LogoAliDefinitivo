@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
+import com.example.testandologoali.db.Nota;
 
 import java.util.Objects;
 
@@ -31,6 +32,7 @@ public class ActivityDetalhe extends AppCompatActivity {
     private Menu menu;
 
     volatile Estabelecimentos estabelecimento;
+    volatile Nota nota;
 
     TextView nome, telefone, rua, numero, bairro, cidade, servicos, horario;
 
@@ -39,7 +41,7 @@ public class ActivityDetalhe extends AppCompatActivity {
     static final int DIALOG_ID = 0;
     int hour_x, minute_x;
 
-    RatingBar nota;
+    RatingBar ratingBarNota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,15 @@ public class ActivityDetalhe extends AppCompatActivity {
     }
 
     void refresh(String idEstab) {
+
+        ratingBarNota = findViewById(R.id.rating_bar_detalhe);
+        ratingBarNota.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                nota.setNota(rating);
+            }
+        });
+
         BancoDeDadosTeste.getInstance().selectEstabelecimento(idEstab, result -> {
             if ((this.estabelecimento = (Estabelecimentos) result.getSingleObject()) != null) {
                 imagem = findViewById(R.id.imagem_estabelecimento_detalhe);
@@ -130,9 +141,6 @@ public class ActivityDetalhe extends AppCompatActivity {
                 horario = findViewById(R.id.horario_estabelecimento_detalhe);
                 horario.setText(estabelecimento.getmHorarioAtendimento());
 
-                nota = findViewById(R.id.rating_bar_detalhe);
-                nota.setRating(estabelecimento.getmNotaEstabelecimento());
-
                 if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
                     getMenuInflater().inflate(R.menu.menu_details, menu);
                 }
@@ -146,6 +154,14 @@ public class ActivityDetalhe extends AppCompatActivity {
                     edit_item.setIcon(R.drawable.ic_mode_edit_white_24dp);
                     edit_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 }
+            }
+        });
+
+        BancoDeDadosTeste.getInstance().getNota(idEstab, LoginHandler.getUsuario().getId(), result -> {
+            if ((this.nota = (Nota) result.getSingleObject()) != null) {
+                ratingBarNota.setRating(nota.getNota());
+            } else {
+                this.nota = new Nota(null, idEstab, LoginHandler.getUsuario().getId(), "-1");
             }
         });
     }
@@ -165,4 +181,13 @@ public class ActivityDetalhe extends AppCompatActivity {
             createAlarm(nome.getText().toString());
         }
     };
+
+    @Override
+    protected void onPause() {
+        if (nota != null && nota.getNota() >= 0)
+            BancoDeDadosTeste.getInstance().createOrUpdateNota(nota, result -> {
+            });
+
+        super.onPause();
+    }
 }
