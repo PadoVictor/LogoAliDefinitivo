@@ -105,7 +105,8 @@ public class ActivityDetalhe extends AppCompatActivity {
         ratingBarNota.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                nota.setNota(rating);
+                if (nota != null)
+                    nota.setNota(rating);
             }
         });
 

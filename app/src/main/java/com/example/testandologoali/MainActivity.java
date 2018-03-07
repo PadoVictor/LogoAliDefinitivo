@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             case MenuItem_Fidelidade:
                 Intent intent2 = new Intent(MainActivity.this, FidelidadeActivity.class);
                 startActivity(intent2);
+                break;
             case MenuItem_Logout:
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                         status -> {

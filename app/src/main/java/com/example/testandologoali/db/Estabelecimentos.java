@@ -109,7 +109,15 @@ public class Estabelecimentos {
     }
 
     public int getmImagemEstabelecimentoThumb() {
-        return 0;
+        if (mId == null) {
+            if (Math.random() > 0.5d)
+                return R.drawable.barbearia1_thumb;
+            else return R.drawable.barbearia2_thumb;
+        } else {
+            if (mId.charAt(0) > '7')
+                return R.drawable.barbearia1_thumb;
+            else return R.drawable.barbearia2_thumb;
+        }
     }
 
     public String getmServicos() {
