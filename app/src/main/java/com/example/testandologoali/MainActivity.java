@@ -14,6 +14,8 @@ import android.widget.ListView;
 import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,21 +23,32 @@ public class MainActivity extends AppCompatActivity {
     private final int MenuItem_MeusEstabelecimentos = 2;
     private final int MenuItem_QRWriter = 3;
     private final int MenuItem_Fidelidade = 4;
+    private final int MenuItem_Logout = 5;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, connectionResult -> {
+                    if (!connectionResult.isSuccess())
+                        throw new InternalError(connectionResult.getErrorMessage());
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Button mButtonBuscar = (Button) findViewById(R.id.botao_buscar_search_activity);
+        Button mButtonBuscar = findViewById(R.id.botao_buscar_search_activity);
 
         mButtonBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTextNomeDaCidade = (EditText) findViewById(R.id.edit_text_cidade_search_activity);
+                editTextNomeDaCidade = findViewById(R.id.edit_text_cidade_search_activity);
                 BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString(), result -> {
                     EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, result.getObjectsList());
-                    final ListView listView = (ListView) findViewById(R.id.list_view_busca);
+                    final ListView listView = findViewById(R.id.list_view_busca);
                     listView.setVisibility(View.VISIBLE);
                     listView.setAdapter(estAdapter);
 
@@ -73,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
             edit_item.setIcon(R.drawable.ic_meus_estabelecimentos_24dp);
             edit_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
+
+        MenuItem fidelidade_item = menu.add(0, MenuItem_Logout, 3, "Sair");
+        fidelidade_item.setIcon(R.drawable.ic_power_settings_new_white_24dp);
+        fidelidade_item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER);
+
         return true;
     }
 
@@ -92,8 +110,22 @@ public class MainActivity extends AppCompatActivity {
             case MenuItem_Fidelidade:
                 Intent intent2 = new Intent(MainActivity.this, FidelidadeActivity.class);
                 startActivity(intent2);
+            case MenuItem_Logout:
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        status -> {
+                            LoginHandler.logout();
+                            Intent intent3 = new Intent(MainActivity.this, GPlusActivity.class);
+                            startActivity(intent3);
+                            finish();
+                        });
         }
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
     }
 }
 

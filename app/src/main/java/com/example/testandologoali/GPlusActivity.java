@@ -178,6 +178,7 @@ public class GPlusActivity extends AppCompatActivity implements
                     break;
             }
             startActivity(intent);
+            finish();
         }
     }
 

@@ -124,6 +124,9 @@ public class ActivityDetalhe extends AppCompatActivity {
                 servicos = findViewById(R.id.serviços_estabelecimento_detalhe);
                 servicos.setText(estabelecimento.getmServicos());
 
+                servicos = findViewById(R.id.dias_estabelecimento_detalhe);
+                servicos.setText(estabelecimento.getmDiasAtendimento());
+
                 horario = findViewById(R.id.horario_estabelecimento_detalhe);
                 horario.setText(estabelecimento.getmHorarioAtendimento());
 
