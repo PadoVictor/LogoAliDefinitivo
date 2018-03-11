@@ -3,6 +3,22 @@ package com.example.testandologoali.db;
 import com.example.patinho.logoali.R;
 
 public class Estabelecimentos {
+    @Override
+    public String toString() {
+        return "Estabelecimentos{" +
+                "mId='" + mId + '\'' +
+                ", mIdAdministrador='" + mIdAdministrador + '\'' +
+                ", mNomeDoEstabelecimento='" + mNomeDoEstabelecimento + '\'' +
+                ", mRuaDoEstabelecimento='" + mRuaDoEstabelecimento + '\'' +
+                ", mNumeroDoEstabelecimento='" + mNumeroDoEstabelecimento + '\'' +
+                ", mBairroDoEstabelecimento='" + mBairroDoEstabelecimento + '\'' +
+                ", mCidadeDoEstabelecimento='" + mCidadeDoEstabelecimento + '\'' +
+                ", mTelefoneDoEstabelecimento='" + mTelefoneDoEstabelecimento + '\'' +
+                ", mServicos='" + mServicos + '\'' +
+                ", mHorarioAtendimento='" + mHorarioAtendimento + '\'' +
+                ", mDiasAtendimento='" + mDiasAtendimento + '\'' +
+                '}';
+    }
 
     @com.google.gson.annotations.SerializedName("id")
     private String mId;

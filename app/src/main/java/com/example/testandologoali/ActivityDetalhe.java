@@ -19,6 +19,7 @@ import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
 import com.example.testandologoali.db.Nota;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ActivityDetalhe extends AppCompatActivity {
@@ -34,7 +35,7 @@ public class ActivityDetalhe extends AppCompatActivity {
     volatile Estabelecimentos estabelecimento;
     volatile Nota nota;
 
-    TextView nome, telefone, rua, numero, bairro, cidade, servicos, horario;
+    TextView nome, telefone, rua, numero, bairro, cidade, servicos, horario, notaMedia;
 
     ImageView imagem;
 
@@ -158,11 +159,25 @@ public class ActivityDetalhe extends AppCompatActivity {
             }
         });
 
-        BancoDeDadosTeste.getInstance().getNota(idEstab, LoginHandler.getUsuario().getId(), result -> {
+        BancoDeDadosTeste.getInstance().getNota(LoginHandler.getUsuario().getId(), idEstab, result -> {
             if ((this.nota = (Nota) result.getSingleObject()) != null) {
                 ratingBarNota.setRating(nota.getNota());
             } else {
-                this.nota = new Nota(null, idEstab, LoginHandler.getUsuario().getId(), "-1");
+                this.nota = new Nota(null, LoginHandler.getUsuario().getId(), idEstab, "-1");
+            }
+        });
+
+        BancoDeDadosTeste.getInstance().getNotasDoEstabelecimento(idEstab, result -> {
+            List<Nota> notas = result.getObjectsList();
+            notaMedia = findViewById(R.id.textViewNotaMedia);
+            if (notas != null && !notas.isEmpty()) {
+                float soma = 0f;
+                for (Nota nota : notas) {
+                    soma += nota.getNota();
+                }
+                notaMedia.setText("Média: " + (soma / (float) notas.size()));
+            } else {
+                notaMedia.setText("Não há avaliações deste estabelecimento ainda.");
             }
         });
     }

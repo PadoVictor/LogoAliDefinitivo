@@ -5,6 +5,16 @@ package com.example.testandologoali.db;
  */
 
 public class Nota {
+    @Override
+    public String toString() {
+        return "Nota{" +
+                "id='" + id + '\'' +
+                ", idEstabelecimento='" + idEstabelecimento + '\'' +
+                ", idUsuario='" + idUsuario + '\'' +
+                ", nota='" + nota + '\'' +
+                '}';
+    }
+
     @com.google.gson.annotations.SerializedName("id")
     private String id;
 

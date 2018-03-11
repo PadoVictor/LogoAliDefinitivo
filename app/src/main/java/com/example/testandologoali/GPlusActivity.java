@@ -3,7 +3,6 @@ package com.example.testandologoali;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +24,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 public class GPlusActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -49,13 +46,13 @@ public class GPlusActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
-        btnSignOut = (Button) findViewById(R.id.btn_sign_out);
-        btnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
-        llProfileLayout = (LinearLayout) findViewById(R.id.llProfile);
-        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        txtName = (TextView) findViewById(R.id.txtName);
-        txtEmail = (TextView) findViewById(R.id.txtEmail);
+        btnSignIn = findViewById(R.id.btn_sign_in);
+        btnSignOut = findViewById(R.id.btn_sign_out);
+        btnRevokeAccess = findViewById(R.id.btn_revoke_access);
+        llProfileLayout = findViewById(R.id.llProfile);
+        imgProfilePic = findViewById(R.id.imgProfilePic);
+        txtName = findViewById(R.id.txtName);
+        txtEmail = findViewById(R.id.txtEmail);
 
         btnSignIn.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
@@ -84,22 +81,12 @@ public class GPlusActivity extends AppCompatActivity implements
 
     private void signOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        updateUI(false);
-                    }
-                });
+                status -> updateUI(false));
     }
 
     private void revokeAccess() {
         Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        updateUI(false);
-                    }
-                });
+                status -> updateUI(false));
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -111,8 +98,8 @@ public class GPlusActivity extends AppCompatActivity implements
             Log.e(TAG, "display name: " + acct.getDisplayName());
 
             String personName = acct.getDisplayName();
-            Uri photoUrl = acct.getPhotoUrl();
-            String personPhotoUrl = photoUrl == null ? "" : acct.getPhotoUrl().toString();
+//            Uri photoUrl = acct.getPhotoUrl();
+//            String personPhotoUrl = photoUrl == null ? "" : acct.getPhotoUrl().toString();
             String email = acct.getEmail();
 
             BancoDeDadosTeste.getInstance().selectAdministradorByEmail(email, result1 -> {
@@ -120,7 +107,6 @@ public class GPlusActivity extends AppCompatActivity implements
                 //Se usuário não existe, criar
                 if (result1.getSingleObject() == null) {
                     createUserDialog(personName, email);
-                    return;
                 } else {
                     logIn((Usuario) result1.getSingleObject());
                 }
@@ -232,12 +218,9 @@ public class GPlusActivity extends AppCompatActivity implements
             // this asynchronous branch will attempt to sign in the USER silently.  Cross-device
             // single sign-on will occur in this branch.
             showProgressDialog();
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
-                }
+            opr.setResultCallback(googleSignInResult -> {
+                hideProgressDialog();
+                handleSignInResult(googleSignInResult);
             });
         }
     }

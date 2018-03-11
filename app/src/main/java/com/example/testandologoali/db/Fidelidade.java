@@ -39,4 +39,14 @@ public class Fidelidade {
         contagem = String.valueOf(contagemInt);
         return contagemInt;
     }
+
+    @Override
+    public String toString() {
+        return "Fidelidade{" +
+                "id='" + id + '\'' +
+                ", idEstabelecimento='" + idEstabelecimento + '\'' +
+                ", idUsuario='" + idUsuario + '\'' +
+                ", contagem='" + contagem + '\'' +
+                '}';
+    }
 }

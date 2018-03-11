@@ -18,6 +18,7 @@ import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -86,6 +87,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void selectEstabelecimentoByCidade(String cidade, BancoDeDadosTesteListener listener) {
+        logQuery("selectEstabelecimentoByCidade", cidade);
         new QueryTask<Estabelecimentos>(listener) {
             @Override
             List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
@@ -97,6 +99,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void selectEstabelecimentoByAdmin(String userID, BancoDeDadosTesteListener listener) {
+        logQuery("selectEstabelecimentoByAdmin", userID);
         new QueryTask<Estabelecimentos>(listener) {
             @Override
             List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
@@ -107,9 +110,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void selectEstabelecimento(String id, BancoDeDadosTesteListener listener) {
-//        if (!LoginHandler.getUsuario().getAcesso().equals(Usuario.ADMIN)) {
-//            return null;
-//        }
+        logQuery("selectEstabelecimento", id);
         new QueryTask<Estabelecimentos>(listener) {
             @Override
             List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
@@ -121,6 +122,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void selectAdministrador(String id, BancoDeDadosTesteListener listener) {
+        logQuery("selectAdministrador", id);
         new QueryTask<Usuario>(listener) {
             @Override
             List<Usuario> query() throws InterruptedException, ExecutionException {
@@ -132,6 +134,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void selectAdministradorByEmail(String email, BancoDeDadosTesteListener listener) {
+        logQuery("selectAdministradorByEmail", email);
         new QueryTask<Usuario>(listener) {
             @Override
             List<Usuario> query() throws InterruptedException, ExecutionException {
@@ -143,6 +146,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void insertUsuario(Usuario usuario, BancoDeDadosTesteListener listener) {
+        logQuery("insertUsuario", usuario);
 //        if (!LoginHandler.getUsuario().getAcesso().equals(Usuario.ADMIN)) {
 //            return null;
 //        }
@@ -156,6 +160,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void insertEstabelecimento(Estabelecimentos estabelecimento, BancoDeDadosTesteListener listener) {
+        logQuery("updateEstabelecimento", estabelecimento);
         new QueryTask<Estabelecimentos>(listener) {
             @Override
             List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
@@ -166,6 +171,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void updateEstabelecimento(Estabelecimentos in, BancoDeDadosTesteListener listener) {
+        logQuery("updateEstabelecimento", in);
         new QueryTask<Estabelecimentos>(listener) {
             @Override
             List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
@@ -177,6 +183,7 @@ public class BancoDeDadosTeste {
     //TODO
     @SuppressLint("StaticFieldLeak")
     public void addFidelidade(Fidelidade fidelidade, BancoDeDadosTesteListener listener) {
+        logQuery("addFidelidade", fidelidade);
         new QueryTask<Fidelidade>(listener) {
             @Override
             List<Fidelidade> query() throws InterruptedException, ExecutionException {
@@ -188,6 +195,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void createFidelidade(Fidelidade fidelidade, BancoDeDadosTesteListener listener) {
+        logQuery("createFidelidade", fidelidade);
         new QueryTask<Fidelidade>(listener) {
             @Override
             List<Fidelidade> query() throws InterruptedException, ExecutionException {
@@ -198,6 +206,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void getFidelidade(String idUsuario, String idEstabelecimento, BancoDeDadosTesteListener listener) {
+        logQuery("getFidelidade", idUsuario, idEstabelecimento);
         new QueryTask<Fidelidade>(listener) {
             @Override
             List<Fidelidade> query() throws InterruptedException, ExecutionException {
@@ -215,6 +224,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void selectFidelidadeByUsuario(String idUsuario, BancoDeDadosTesteListener listener) {
+        logQuery("selectFidelidadeByUsuario", idUsuario);
         new QueryTask<Fidelidade>(listener) {
             @Override
             List<Fidelidade> query() throws InterruptedException, ExecutionException {
@@ -228,6 +238,7 @@ public class BancoDeDadosTeste {
 
     @SuppressLint("StaticFieldLeak")
     public void getNota(String idUsuario, String idEstabelecimento, BancoDeDadosTesteListener listener) {
+        logQuery("getNota", idUsuario, idEstabelecimento);
         new QueryTask<Nota>(listener) {
             @Override
             List<Nota> query() throws InterruptedException, ExecutionException {
@@ -244,7 +255,22 @@ public class BancoDeDadosTeste {
     }
 
     @SuppressLint("StaticFieldLeak")
+    public void getNotasDoEstabelecimento(String idEstabelecimento, BancoDeDadosTesteListener listener) {
+        logQuery("getNotasDoEstabelecimento", idEstabelecimento);
+        new QueryTask<Nota>(listener) {
+            @Override
+            List<Nota> query() throws InterruptedException, ExecutionException {
+                return mTabelaNota
+                        .where()
+                        .field("idestabelecimento")
+                        .eq(val(idEstabelecimento)).execute().get();
+            }
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
     public void createOrUpdateNota(Nota nota, BancoDeDadosTesteListener listener) {
+        logQuery("createOrUpdateNota", nota);
         BancoDeDadosTeste.getInstance().getNota(nota.getIdUsuario(), nota.getIdEstabelecimento(), result -> {
             Nota nota1 = (Nota) result.getSingleObject();
 
@@ -291,6 +317,15 @@ public class BancoDeDadosTeste {
         }
     }
 
+    private void logQuery(String methodName, String... params) {
+        Log.d(this.getClass().getName(), "Calling " + methodName + " with params " + Arrays.toString(params));
+    }
+
+    private void logQuery(String methodName, Object param) {
+        Log.d(this.getClass().getName(), "Calling " + methodName + " with params " + param.toString());
+    }
+
+
     public abstract static class QueryTask<T> extends AsyncTask<Void, Void, QueryResult<T>> {
         private final BancoDeDadosTesteListener<T> listener;
 
@@ -300,7 +335,7 @@ public class BancoDeDadosTeste {
             this.listener = listener;
         }
 
-        public void execute() {
+        void execute() {
             super.execute();
         }
 
@@ -311,7 +346,7 @@ public class BancoDeDadosTeste {
                 if (!assertUnique || result.isUnique()) {
                     return result;
                 }
-                Log.e(BancoDeDadosTeste.class.getName(), "Query result is not unique!");
+                throw new InternalError("Query result is not unique! " + result.getObjectsList().toString());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -320,7 +355,7 @@ public class BancoDeDadosTeste {
 
         abstract List<T> query() throws InterruptedException, ExecutionException;
 
-        public List<T> toList(T result) {
+        List<T> toList(T result) {
             ArrayList<T> resultList = new ArrayList<>();
             resultList.add(result);
             return resultList;
@@ -357,7 +392,7 @@ public class BancoDeDadosTeste {
         }
 
         boolean isUnique() {
-            return resultObjects != null && resultObjects.size() == 1;
+            return resultObjects != null && resultObjects.size() <= 1;
         }
     }
 }

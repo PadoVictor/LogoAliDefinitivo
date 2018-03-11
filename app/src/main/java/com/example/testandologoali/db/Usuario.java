@@ -3,6 +3,15 @@ package com.example.testandologoali.db;
 import android.util.Log;
 
 public class Usuario {
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id='" + id + '\'' +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", acesso='" + acesso + '\'' +
+                '}';
+    }
 
     @com.google.gson.annotations.SerializedName("id")
     private String id;
