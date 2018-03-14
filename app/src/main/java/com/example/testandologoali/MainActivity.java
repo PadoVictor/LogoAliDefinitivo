@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.patinho.logoali.R;
@@ -16,14 +17,19 @@ import com.example.testandologoali.db.Estabelecimentos;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextNomeDaCidade;
+    AutoCompleteTextView editTextNomeDaCidade;
     private final int MenuItem_MeusEstabelecimentos = 2;
     private final int MenuItem_QRWriter = 3;
     private final int MenuItem_Fidelidade = 4;
     private final int MenuItem_Logout = 5;
     private GoogleApiClient mGoogleApiClient;
+
+    View.OnClickListener listenerTabela;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +46,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         Button mButtonBuscar = findViewById(R.id.botao_buscar_search_activity);
+        editTextNomeDaCidade = findViewById(R.id.edit_text_cidade_search_activity);
 
-        mButtonBuscar.setOnClickListener(v -> {
-            editTextNomeDaCidade = findViewById(R.id.edit_text_cidade_search_activity);
-            BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString(), result -> {
-                EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, result.getObjectsList());
-                final ListView listView = findViewById(R.id.list_view_busca);
-                listView.setVisibility(View.VISIBLE);
-                listView.setAdapter(estAdapter);
+        listenerTabela = v -> update();
+        editTextNomeDaCidade.setOnClickListener(listenerTabela);
+        editTextNomeDaCidade.setOnItemClickListener((parent, view, position, id) -> update());
+        mButtonBuscar.setOnClickListener(listenerTabela);
 
-                listView.setOnItemClickListener((adapter, view, position, l) -> {
-                    Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
-                    String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
-                    intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
-                    startActivity(intent);
-                });
+        BancoDeDadosTeste.getInstance().selectCidades(result -> {
+            List<String> cidades = new ArrayList<>();
+            for (Estabelecimentos estabelecimento : (List<Estabelecimentos>) (result.getObjectsList())) {
+                if (!cidades.contains(estabelecimento.getmCidadeDoEstabelecimento()))
+                    cidades.add(estabelecimento.getmCidadeDoEstabelecimento());
+            }
+            ArrayAdapter<String> dropDownAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_dropdown_item_1line, cidades);
+            editTextNomeDaCidade.setAdapter(dropDownAdapter);
+        });
+    }
+
+    private void update() {
+        BancoDeDadosTeste.getInstance().selectEstabelecimentoByCidade(editTextNomeDaCidade.getText().toString(), result -> {
+            EstabelecimentoAdapter estAdapter = new EstabelecimentoAdapter(MainActivity.this, result.getObjectsList());
+            final ListView listView = findViewById(R.id.list_view_busca);
+            listView.setVisibility(View.VISIBLE);
+            listView.setAdapter(estAdapter);
+
+            listView.setOnItemClickListener((adapter, view, position, l) -> {
+                Intent intent = new Intent(MainActivity.this, ActivityDetalhe.class);
+                String idEstabelecimento = ((Estabelecimentos) adapter.getItemAtPosition(position)).getmId();
+                intent.putExtra(ActivityDetalhe.ID_ESTABELECIMENTO, idEstabelecimento);
+                startActivity(intent);
             });
-
         });
     }
 

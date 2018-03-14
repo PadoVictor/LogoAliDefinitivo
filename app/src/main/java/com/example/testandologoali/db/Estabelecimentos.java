@@ -1,6 +1,15 @@
 package com.example.testandologoali.db;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+
 import com.example.patinho.logoali.R;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class Estabelecimentos {
     @Override
@@ -53,13 +62,16 @@ public class Estabelecimentos {
     @com.google.gson.annotations.SerializedName("dias")
     private String mDiasAtendimento;
 
+    @com.google.gson.annotations.SerializedName("imagem")
+    private String mImagemEstabelecimento;
+
 //    private float mNotaEstabelecimento;
 //    private int mImagemEstabelecimento;
 //    private int mImagemEstabelecimentoThumb;
 
     public Estabelecimentos(String id, String nome, String rua, String numero
             , String bairro, String cidade, String telefone, String servicos
-            , String horas, String idadministrador, String dias) {
+            , String horas, String idadministrador, String dias, String imagem) {
 
         mId = id;
         mIdAdministrador = idadministrador;
@@ -69,7 +81,7 @@ public class Estabelecimentos {
         mBairroDoEstabelecimento = bairro;
         mCidadeDoEstabelecimento = cidade;
         mTelefoneDoEstabelecimento = telefone;
-//        mImagemEstabelecimento = vImagemEstabelecimento;
+        mImagemEstabelecimento = imagem;
 //        mNotaEstabelecimento = vNotaEstabelecimento;
 //        mImagemEstabelecimentoThumb = vImagemEstabelecimentoThumb;
         mServicos = servicos;
@@ -77,7 +89,8 @@ public class Estabelecimentos {
         mDiasAtendimento = dias;
     }
 
-    public Estabelecimentos() {}
+    public Estabelecimentos() {
+    }
 
 
     public String getmId() {
@@ -112,28 +125,39 @@ public class Estabelecimentos {
         return mCidadeDoEstabelecimento;
     }
 
-    public int getmImagemEstabelecimento() {
+    public Bitmap getmImagemEstabelecimento(Context context) {
+        if (mImagemEstabelecimento != null && !mImagemEstabelecimento.isEmpty()) {
+            Uri uri = Uri.fromFile(new File(mImagemEstabelecimento));
+            try {
+                InputStream imageStream = context.getContentResolver().openInputStream(uri);
+                return BitmapFactory.decodeStream(imageStream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         if (mId == null) {
-            if (Math.random() > 0.5d)
-                return R.drawable.barbearia1;
-            else return R.drawable.barbearia2;
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
         } else {
             if (mId.charAt(0) > '7')
-                return R.drawable.barbearia1;
-            else return R.drawable.barbearia2;
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.barbearia1);
+            else return BitmapFactory.decodeResource(context.getResources(), R.drawable.barbearia2);
         }
     }
 
-    public int getmImagemEstabelecimentoThumb() {
-        if (mId == null) {
-            if (Math.random() > 0.5d)
-                return R.drawable.barbearia1_thumb;
-            else return R.drawable.barbearia2_thumb;
-        } else {
-            if (mId.charAt(0) > '7')
-                return R.drawable.barbearia1_thumb;
-            else return R.drawable.barbearia2_thumb;
+    public Bitmap getmImagemEstabelecimentoThumb(Context context) {
+        if (mImagemEstabelecimento != null && !mImagemEstabelecimento.isEmpty()) {
+            Uri uri = Uri.fromFile(new File(mImagemEstabelecimento));
+            try {
+                InputStream imageStream = context.getContentResolver().openInputStream(uri);
+                return BitmapFactory.decodeStream(imageStream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
+        if (mId.charAt(0) > '7')
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.barbearia1_thumb);
+        else
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.barbearia2_thumb);
     }
 
     public String getmServicos() {
@@ -176,8 +200,8 @@ public class Estabelecimentos {
         this.mHorarioAtendimento = mHorarioAtendimento;
     }
 
-    public void setmImagemEstabelecimento(int mImagemEstabelecimento) {
-//        this.mImagemEstabelecimento = mImagemEstabelecimento;
+    public void setmImagemEstabelecimento(String mImagemEstabelecimento) {
+        this.mImagemEstabelecimento = mImagemEstabelecimento;
     }
 
     public void setmImagemEstabelecimentoThumb(int mImagemEstabelecimentoThumb) {

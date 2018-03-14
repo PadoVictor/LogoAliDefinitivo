@@ -40,7 +40,7 @@
 
     </LinearLayout>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edit_text_cidade_search_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

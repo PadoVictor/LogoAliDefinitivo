@@ -1,7 +1,17 @@
 package com.example.testandologoali;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,17 +22,21 @@ import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.BancoDeDadosTeste;
 import com.example.testandologoali.db.Estabelecimentos;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import static com.example.testandologoali.ActivityDetalhe.ID_ESTABELECIMENTO;
 
 public class ActivityEditEstab extends AppCompatActivity {
 
-    boolean createMode = false;
-
+    // Este é o código de ação que usamos no intent,
+    // Desta forma sabemos que estamos a olhar para a resposta da nossa própria ação.
+    private static final int SELECT_PICTURE = 123;
     protected Estabelecimentos estabelecimento;
-
+    boolean createMode = false;
     ImageView imagem;
-
     EditText nome, telefone, rua, numero, bairro, cidade, servicos, horario;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 987;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +59,61 @@ public class ActivityEditEstab extends AppCompatActivity {
             createMode = true;
             populateViews();
         }
+
+        (findViewById(R.id.imageView))
+                .setOnClickListener(arg0 -> {
+
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        openGallery();
+                    } else {
+                        requestPermission();
+                    }
+                });
+    }
+
+    private void openGallery() {
+        // No onCreate ou qualquer evento onde quiser selecionar um arquivo
+        Intent intent1 = new Intent();
+        intent1.setType("image/*");
+        intent1.setAction(Intent.ACTION_PICK);
+        startActivityForResult(Intent.createChooser(intent1,
+                "Select Picture"), SELECT_PICTURE);
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    openGallery();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 
     private void populateViews() {
         imagem = findViewById(R.id.imageView);
-        imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
+        imagem.setImageBitmap(estabelecimento.getmImagemEstabelecimento(this));
 
         nome = findViewById(R.id.edit_text_nome_estabelecimento);
         nome.setText(estabelecimento.getmNomeDoEstabelecimento());
@@ -117,5 +181,64 @@ public class ActivityEditEstab extends AppCompatActivity {
             this.finish();
         }
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImage = data.getData();
+                InputStream imageStream = null;
+                try {
+                    imageStream = getContentResolver().openInputStream(selectedImage);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+                imagem.setImageBitmap(yourSelectedImage);
+                estabelecimento.setmImagemEstabelecimento(getRealPathFromURI(this, selectedImage));
+            }
+        }
+    }
+
+    /**
+     * auxiliar para saber o caminho de uma imagem URI
+     */
+    public String getPath(Uri uri) {
+
+        if (uri == null) {
+            // TODO realizar algum log ou feedback do utilizador
+            return null;
+        }
+
+
+        // Tenta recuperar a imagem da media store primeiro
+        // Isto só irá funcionar para as imagens selecionadas da galeria
+
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+
+        return uri.getPath();
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

@@ -22,9 +22,9 @@ public class ActivityCreateEstab extends ActivityEditEstab {
         estabelecimento = new Estabelecimentos("", "", "",
                 "", "", "",
                 "", "", "",
-                LoginHandler.getUsuario().getId(), "");
+                LoginHandler.getUsuario().getId(), "", "");
         imagem = (ImageView) findViewById(R.id.imageView);
-        imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
+        imagem.setImageBitmap(estabelecimento.getmImagemEstabelecimento(this));
 
         nome = (EditText) findViewById(R.id.edit_text_nome_estabelecimento);
         telefone = (EditText) findViewById(R.id.edit_text_telefone_estabelecimento);

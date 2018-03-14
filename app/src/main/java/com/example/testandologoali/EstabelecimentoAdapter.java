@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.example.patinho.logoali.R;
 import com.example.testandologoali.db.Estabelecimentos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EstabelecimentoAdapter extends ArrayAdapter<Estabelecimentos> {
@@ -31,7 +30,7 @@ public class EstabelecimentoAdapter extends ArrayAdapter<Estabelecimentos> {
         Estabelecimentos mEstabelecimentoAtual = getItem(position);
 
         ImageView mImagemDoEstabelecimento = (ImageView) listItemView.findViewById(R.id.imagem_estabelecimento_list_item);
-        mImagemDoEstabelecimento.setImageResource(mEstabelecimentoAtual.getmImagemEstabelecimentoThumb());
+        mImagemDoEstabelecimento.setImageBitmap(mEstabelecimentoAtual.getmImagemEstabelecimentoThumb(this.getContext()));
 
         TextView mNomeDoEstabelecimento = (TextView) listItemView.findViewById(R.id.Nome);
         mNomeDoEstabelecimento.setText(mEstabelecimentoAtual.getmNomeDoEstabelecimento());

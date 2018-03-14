@@ -121,6 +121,17 @@ public class BancoDeDadosTeste {
     }
 
     @SuppressLint("StaticFieldLeak")
+    public void selectCidades(BancoDeDadosTesteListener listener) {
+        logQuery("selectCidades");
+        new QueryTask<Estabelecimentos>(listener) {
+            @Override
+            List<Estabelecimentos> query() throws InterruptedException, ExecutionException {
+                return mTabelaEstab.where().select("cidade").execute().get();
+            }
+        }.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
     public void selectAdministrador(String id, BancoDeDadosTesteListener listener) {
         logQuery("selectAdministrador", id);
         new QueryTask<Usuario>(listener) {
@@ -344,6 +355,7 @@ public class BancoDeDadosTeste {
             try {
                 QueryResult<T> result = new QueryResult<>(true, query());
                 if (!assertUnique || result.isUnique()) {
+                    Log.d(this.getClass().getName(), "Query returned: " + result.getObjectsList().toString());
                     return result;
                 }
                 throw new InternalError("Query result is not unique! " + result.getObjectsList().toString());

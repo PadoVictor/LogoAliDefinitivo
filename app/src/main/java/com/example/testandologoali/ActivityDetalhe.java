@@ -114,7 +114,7 @@ public class ActivityDetalhe extends AppCompatActivity {
         BancoDeDadosTeste.getInstance().selectEstabelecimento(idEstab, result -> {
             if ((this.estabelecimento = (Estabelecimentos) result.getSingleObject()) != null) {
                 imagem = findViewById(R.id.imagem_estabelecimento_detalhe);
-                imagem.setImageResource(estabelecimento.getmImagemEstabelecimento());
+                imagem.setImageBitmap(estabelecimento.getmImagemEstabelecimento(this));
 
                 nome = findViewById(R.id.nome_estabelecimento_detalhe);
                 nome.setText(estabelecimento.getmNomeDoEstabelecimento());
