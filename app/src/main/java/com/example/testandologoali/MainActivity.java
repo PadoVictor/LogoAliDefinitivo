@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             case MenuItem_MeusEstabelecimentos:
                 Intent intent = new Intent(MainActivity.this, ActivityEstabelecimentos.class);
                 startActivity(intent);
+                finish();
                 break;
             case MenuItem_QRWriter:
                 String idCliente = LoginHandler.getUsuario().getId() + ":" + LoginHandler.getUsuario().getNome();

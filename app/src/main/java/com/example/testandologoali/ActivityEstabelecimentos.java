@@ -66,6 +66,7 @@ public class ActivityEstabelecimentos extends AppCompatActivity {
             if (BancoDeDadosTeste.ADMIN.equals(LoginHandler.getUsuario().getAcesso())) {
                 Intent intent = new Intent(ActivityEstabelecimentos.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         }
         return true;

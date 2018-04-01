@@ -31,6 +31,7 @@ public class ActivityDetalhe extends AppCompatActivity {
     private final int MenuItem_QRCamera = 2;
 
     private Menu menu;
+    private boolean isMenuInflated = false;
 
     volatile Estabelecimentos estabelecimento;
     volatile Nota nota;
@@ -143,8 +144,9 @@ public class ActivityDetalhe extends AppCompatActivity {
                 horario = findViewById(R.id.horario_estabelecimento_detalhe);
                 horario.setText(estabelecimento.getmHorarioAtendimento());
 
-                if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {
+                if (!Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId()) && !isMenuInflated) {
                     getMenuInflater().inflate(R.menu.menu_details, menu);
+                    isMenuInflated = true;
                 }
 
                 if (Objects.equals(estabelecimento.getmIdAdministrador(), LoginHandler.getUsuario().getId())) {

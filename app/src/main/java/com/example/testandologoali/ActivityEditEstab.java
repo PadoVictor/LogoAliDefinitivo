@@ -145,11 +145,7 @@ public class ActivityEditEstab extends AppCompatActivity {
 
         setValuesFromText();
 
-        if (createMode) {
-            estabelecimento.setmIdAdministrador(LoginHandler.getUsuario().getId());
-            BancoDeDadosTeste.getInstance().insertEstabelecimento(estabelecimento, result -> {
-            });
-        } else {
+        if (!createMode) {
             BancoDeDadosTeste.getInstance().updateEstabelecimento(estabelecimento, result -> {
             });
         }
@@ -178,6 +174,11 @@ public class ActivityEditEstab extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.edit_stab_salvar) {
+            if (createMode) {
+                estabelecimento.setmIdAdministrador(LoginHandler.getUsuario().getId());
+                BancoDeDadosTeste.getInstance().insertEstabelecimento(estabelecimento, result -> {
+                });
+            }
             this.finish();
         }
         return true;

@@ -114,7 +114,7 @@ public class Estabelecimentos {
     }
 
     public String getmNumeroDoEstabelecimento() {
-        return mNumeroDoEstabelecimento;
+        return mNumeroDoEstabelecimento == null ? "" : mNumeroDoEstabelecimento;
     }
 
     public String getmBairroDoEstabelecimento() {
