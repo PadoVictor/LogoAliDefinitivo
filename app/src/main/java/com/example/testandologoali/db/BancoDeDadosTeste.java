@@ -63,7 +63,7 @@ public class BancoDeDadosTeste {
       Mobile Service Client reference
      */
             MobileServiceClient mClient = new MobileServiceClient(
-                    "https://logoali2.azurewebsites.net/",
+                    "http://logoalitcc.azurewebsites.net/",
                     activity).withFilter(new ProgressFilter());
 
             // Extend timeout from default of 10s to 20s
